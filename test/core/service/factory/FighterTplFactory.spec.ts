@@ -3,7 +3,7 @@ import AppConst from "../../../../lib/core/ioc/app.const";
 import * as mock from "../../../mock.spec";
 import { setup } from "../../../setup.spec";
 import IFactory from "../../../../lib/core/service/factory/IFactory";
-import FighterTemplate from "../../../../lib/core/model/schema/city/FighterTemplate";
+import FighterTemplate from "../../../../lib/core/model/schema/FighterTemplate";
 
 describe('FighterTplFactory test suite', 
 ()=>{

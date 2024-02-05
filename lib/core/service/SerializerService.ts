@@ -1,4 +1,4 @@
-import Fighter from "../model/schema/city/Fighter";
+import Fighter from "../model/schema/Fighter";
 import ISerializerService from "./ISerializerService";
 
 export default class SerializerService implements ISerializerService{

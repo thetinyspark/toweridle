@@ -3,7 +3,8 @@ import { setup } from "../../setup.spec";
 import AppConst from "../../../lib/core/ioc/app.const";
 import * as mock from "../../mock.spec";
 import IRepository from "../../../lib/core/model/repository/IRepository";
-import FighterTemplate from "../../../lib/core/model/schema/city/FighterTemplate";
+import FighterTemplate from "../../../lib/core/model/schema/FighterTemplate";
+
 
 describe('StartCommand test suite', 
 ()=>{

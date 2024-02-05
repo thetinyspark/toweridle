@@ -2,7 +2,7 @@ import { Facade, ICommand } from "@thetinyspark/coffe-maker";
 import { INotification } from "@thetinyspark/tiny-observer";
 import AppConst from "../ioc/app.const";
 import IRepository from "../model/repository/IRepository";
-import FighterTemplate from "../model/schema/city/FighterTemplate";
+import FighterTemplate from "../model/schema/FighterTemplate";
 import IFactory from "../service/factory/IFactory";
 
 /**

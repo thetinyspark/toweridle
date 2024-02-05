@@ -2,9 +2,9 @@ import { Container, Facade } from "@thetinyspark/coffe-maker";
 import IRepository from "../../../../lib/core/model/repository/IRepository";
 import { setup } from "../../../setup.spec";
 import AppConst from "../../../../lib/core/ioc/app.const";
-import Fighter from "../../../../lib/core/model/schema/city/Fighter";
 import { ARCHER_LVL1_TPL_DESC, KNIGHT_LVL1_TPL_DESC, MONK_LVL1_TPL_DESC, WIZARD_LVL1_TPL_DESC, createFighterTemplate } from "../../../mock.spec";
-import FighterTemplate from "../../../../lib/core/model/schema/city/FighterTemplate";
+import FighterTemplate from "../../../../lib/core/model/schema/FighterTemplate";
+import Fighter from "../../../../lib/core/model/schema/Fighter";
 
 describe('IRepository test suite', 
 ()=>{

@@ -5,7 +5,7 @@ import { configFacade, configIOC } from "./ioc/config";
 import { version } from "../version";
 import IUIDService from "./service/IUIDService";
 import IRepository from "./model/repository/IRepository";
-import Fighter from "./model/schema/city/Fighter";
+import Fighter from "./model/schema/Fighter";
 /**
  * The Engine object represents the main gateway between you and the paradox engine's core.
  */

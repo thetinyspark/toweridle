@@ -1,4 +1,4 @@
-import Fighter from "../model/schema/city/Fighter";
+import Fighter from "../model/schema/Fighter";
 
 export default interface ISerializerService{
     serialize(fighters:Fighter[]):any[];

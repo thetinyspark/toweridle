@@ -1,4 +1,4 @@
-import FighterTemplate from "../../model/schema/city/FighterTemplate";
+import FighterTemplate from "../../model/schema/FighterTemplate";
 import IUIDService from "../IUIDService";
 import IFactory from "./IFactory";
 

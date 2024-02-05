@@ -4,7 +4,7 @@ import AppConst from "../lib/core/ioc/app.const";
 import IUIDService from "../lib/core/service/IUIDService";
 import Engine from "../lib/core/Engine";
 import IRepository from "../lib/core/model/repository/IRepository";
-import Fighter from "../lib/core/model/schema/city/Fighter";
+import Fighter from "../lib/core/model/schema/Fighter";
 
 export function setup(container = new Container()){
     configIOC(container);

@@ -1,5 +1,5 @@
-import Fighter from "../lib/core/model/schema/city/Fighter";
-import FighterTemplate from "../lib/core/model/schema/city/FighterTemplate";
+import Fighter from "../lib/core/model/schema/Fighter";
+import FighterTemplate from "../lib/core/model/schema/FighterTemplate";
 import { FighterDescType } from "../lib/core/model/types/FighterDescType";
 import { GameDataType } from "../lib/core/model/types/GameDataType";
 import { FighterTemplateDescType } from "../lib/core/model/types/FighterTemplateDescType";
