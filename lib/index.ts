@@ -1,13 +1,8 @@
-import { Container } from "@thetinyspark/coffe-maker";
-import Engine from "./core/Engine";
-import AppConst from "./core/ioc/app.const";
+import Main from "./proto/Main";
 
-const defaultContainer = new Container();
-const engine = new Engine();
-const paradoxConstants = AppConst;
-
-export = {
-    engine, 
-    defaultContainer, 
-    paradoxConstants
+window.onload = function(){
+    const main = new Main();
+    main.start();
 };
+
+

@@ -1,4 +1,4 @@
-import { GameNode } from "../../../sdk/common/model/node";
+import { GameNode } from "@thetinyspark/moocaccino-barista";
 import Fighter from "./Fighter";
 
 export default class Spawner extends GameNode{
