@@ -1,9 +1,9 @@
-import { AssetsManager, IMAGE_TYPE, JSON_TYPE, Stage } from "@thetinyspark/moocaccino-barista";
+import { AssetsManager, IMAGE_TYPE, INotification, JSON_TYPE, Stage } from "@thetinyspark/moocaccino-barista";
 import TextureFactory from "./factory/TextureFactory";
 import SpriteFactory from "./factory/SpriteFactory";
 import BattleField from "./view/BattfleField";
-import { BattleFieldDescType } from "../core/model/types/BattleFieldDescType";
 import BattfleFieldDataType from "./types/BattleFieldDataType";
+import BattleFieldEvent from "./event/BattleFieldEvent";
 
 export default class Main{
 
@@ -12,9 +12,13 @@ export default class Main{
     private _spriteFactory:SpriteFactory;
     private _stage:Stage;
     private _assetsManager:AssetsManager;
+    private _level:BattfleFieldDataType
+    private _gameOver:boolean = false;
 
     public start(){
+        this.cycleLoop = this.cycleLoop.bind(this); 
         this.onComplete = this.onComplete.bind(this); 
+        this.gameOverHandler = this.gameOverHandler.bind(this); 
         this.renderLoop = this.renderLoop.bind(this); 
         this.load = this.load.bind(this);
 
@@ -28,12 +32,46 @@ export default class Main{
         this._stage.getCanvas().height = 480;
         document.body.appendChild(this._stage.getCanvas()); 
 
+        
         this.renderLoop();
         this.load();
     }
 
+    simulate(){
+        let keepSimulate = true;
+        const  battlefield = new BattleField(this._spriteFactory);
+        const onGameOver = (notif:INotification)=>{
+            keepSimulate = false;
+            console.log(notif.getPayload());
+        };  
+        battlefield.init(this._level);
+        battlefield.subscribe(BattleFieldEvent.GAME_OVER, onGameOver, 1);
+        while(keepSimulate){
+            battlefield.doCycle();
+        }
+    }
+
+    cycleLoop(){
+        if( this._gameOver )
+            return; 
+
+        this._battleField.doCycle(); 
+        setTimeout( 
+            ()=>{
+                this.cycleLoop()
+            }, 
+            this._level.cycleInMs
+        )
+    }
+
+    gameOverHandler(notif:INotification){
+        this._battleField.unsubscribeAll();
+        this._gameOver = true;
+        console.log("game over", notif.getPayload());
+    }
+
     renderLoop(){
-        this._battleField.refresh();
+        // this._battleField.refresh();
         this._stage.nextFrame();
         window.requestAnimationFrame(this.renderLoop);
     }
@@ -49,8 +87,18 @@ export default class Main{
     }
 
     onComplete(){
-        const data:BattfleFieldDataType = this._assetsManager.get("bf1_json");
-        this._battleField.init(data);
-        this._stage.addChild(this._battleField);
+        this._level = this._assetsManager.get("bf1_json");
+
+        if( (this._level as any).simulate){
+            console.time("simulation");
+            this.simulate();
+            console.timeEnd("simulation");
+        }
+        else{   
+            this._battleField.init(this._level);
+            this._battleField.subscribe(BattleFieldEvent.GAME_OVER, this.gameOverHandler);
+            this._stage.addChild(this._battleField);
+            this.cycleLoop();
+        }
     }
 }

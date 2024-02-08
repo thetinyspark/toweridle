@@ -10,4 +10,5 @@ export default class Spawner extends DisplayObjectContainer {
     doCycle(factory: SpriteFactory): Fighter | null;
     removeFighter(fighter: Fighter): void;
     getFighters(): Fighter[];
+    isEmpty(): boolean;
 }

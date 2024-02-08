@@ -1,19 +1,22 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const moocaccino_barista_1 = require("@thetinyspark/moocaccino-barista");
+const BattleFieldEvent_1 = require("../event/BattleFieldEvent");
 class BattleField extends moocaccino_barista_1.DisplayObjectContainer {
     _spriteFactory;
+    _attackersBeyondGate = [];
     _spawnersAtk = [];
     _spawnersDfd = [];
     _level = null;
     _pathfinder = null;
     _graphe = null;
+    _door = null;
     constructor(_spriteFactory) {
         super();
         this._spriteFactory = _spriteFactory;
         this.addChild = this.addChild.bind(this);
         this.doCycle = this.doCycle.bind(this);
-        this.cycleLoop = this.cycleLoop.bind(this);
+        this.predictNextTargetNodes = this.predictNextTargetNodes.bind(this);
     }
     init(level) {
         this.removeChildren();
@@ -31,17 +34,31 @@ class BattleField extends moocaccino_barista_1.DisplayObjectContainer {
         const grid = moocaccino_barista_1.Grid2D.from(this._level.data);
         this._pathfinder = new moocaccino_barista_1.PathFinder2D();
         this._graphe = this._pathfinder.createGraphe(grid, 0);
-        this.cycleLoop();
+        this.initDoor();
+    }
+    initDoor() {
+        this._door = this._spriteFactory.createFighter(this._level.door, this._level.targetRow, this._level.targetCol, 25);
+        this.addChild(this._door);
+    }
+    getDefenders(withDoor = true) {
+        const defenders = this._spawnersDfd.flatMap(s => s.getFighters());
+        if (withDoor && !this._door.isDead())
+            defenders.push(this._door);
+        return defenders;
+    }
+    getAttackers() {
+        return this._spawnersAtk.flatMap(s => s.getFighters());
     }
     fight() {
-        const attackers = this._spawnersAtk.flatMap(s => s.getFighters());
-        const defenders = this._spawnersDfd.flatMap(s => s.getFighters());
+        const attackers = this.getAttackers();
+        ;
+        const defenders = this.getDefenders();
         // atk + def
         attackers.forEach((fighter) => {
-            fighter.fight(defenders);
+            fighter.fight();
         });
         defenders.forEach((fighter) => {
-            fighter.fight(attackers);
+            fighter.fight();
         });
         // count deads and remove them from spawners
         this._spawnersAtk.forEach((spawner) => {
@@ -56,55 +73,126 @@ class BattleField extends moocaccino_barista_1.DisplayObjectContainer {
                 this.removeChild(dead);
             });
         });
+        if (this._door.isDead() && this.contains(this._door)) {
+            this.removeChild(this._door);
+        }
     }
-    refresh() {
-        const attackers = this._spawnersAtk.flatMap(s => s.getFighters());
-        const defenders = this._spawnersDfd.flatMap(s => s.getFighters());
-        // atk + def
+    checkAttackersBeyondDoor() {
+        if (this._door.isDead() === false)
+            return;
+        const row = this._level.targetRow;
+        const col = this._level.targetCol;
+        // count attackers who passes the gate
+        this._spawnersAtk.forEach((spawner) => {
+            spawner.getFighters().filter(f => f.row == row && f.col === col).forEach((fighter) => {
+                spawner.removeFighter(fighter);
+                this.removeChild(fighter);
+                this._attackersBeyondGate.push(fighter);
+            });
+        });
+    }
+    refreshLifebars() {
+        const attackers = this.getAttackers();
+        const defenders = this.getDefenders();
+        const fighters = attackers.concat(defenders);
+        fighters.forEach((fighter) => {
+            fighter.refresh();
+        });
+    }
+    moveFighters() {
+        const attackers = this.getAttackers();
+        ;
+        const defenders = this.getDefenders();
+        const fighters = attackers.concat(defenders);
+        fighters.forEach((fighter) => {
+            fighter.move(25);
+        });
+    }
+    predictNextTargetNodes() {
+        const attackers = this.getAttackers();
+        ;
+        const defenders = this.getDefenders();
+        const fighters = attackers.concat(defenders);
+        fighters.forEach((fighter) => {
+            fighter.calculateNextTargetNode();
+        });
+    }
+    setFightersPath() {
+        const attackers = this.getAttackers();
+        const defenders = this.getDefenders();
         attackers.forEach((fighter) => {
-            fighter.refresh(25);
+            const row = fighter.row;
+            const col = fighter.col;
+            const startNode = this._graphe.getAt(row, col);
+            const endNode = this._graphe.getAt(this._level.targetRow, this._level.targetCol);
+            const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
+            fighter.setPath(path);
         });
         defenders.forEach((fighter) => {
-            fighter.refresh(25);
+            if (fighter.getPath().length > 0)
+                return;
+            const enemy = fighter.getClosestEnemy(attackers);
+            if (enemy == null) {
+                return;
+            }
+            const startNode = this._graphe.getAt(fighter.row, fighter.col);
+            const endNode = this._graphe.getAt(enemy.row, enemy.col);
+            const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
+            fighter.setPath(path);
         });
     }
-    cycleLoop() {
-        this.doCycle();
-        setTimeout(() => {
-            this.cycleLoop();
-        }, this._level.cycleInMs);
+    searchForEnemies() {
+        const attackers = this.getAttackers();
+        ;
+        const defenders = this.getDefenders();
+        attackers.forEach((fighter) => {
+            fighter.searchEnemy(defenders);
+        });
+        defenders.forEach((fighter) => {
+            fighter.searchEnemy(attackers);
+        });
     }
-    doCycle() {
+    spawnNewFighters() {
         this._spawnersAtk.forEach((spawner) => {
             const fighter = spawner.doCycle(this._spriteFactory);
             if (fighter !== null) {
                 this.addChild(fighter);
-                const row = fighter.getRow();
-                const col = fighter.getCol();
-                const startNode = this._graphe.getAt(row, col);
-                const endNode = this._graphe.getAt(this._level.targetRow, this._level.targetCol);
-                const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
-                fighter.setPath(path);
             }
         });
         this._spawnersDfd.forEach((spawner) => {
             const fighter = spawner.doCycle(this._spriteFactory);
             if (fighter !== null)
                 this.addChild(fighter);
-            const attackers = this._spawnersAtk.flatMap(s => s.getFighters());
-            spawner.getFighters().forEach((fighter) => {
-                if (fighter.getPath().length > 0)
-                    return;
-                const enemy = fighter.getClosestEnemy(attackers);
-                if (enemy == null)
-                    return;
-                const startNode = this._graphe.getAt(fighter.getRow(), fighter.getCol());
-                const endNode = this._graphe.getAt(enemy.getRow(), enemy.getCol());
-                const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
-                fighter.setPath(path);
-            });
         });
+    }
+    checkGameOver() {
+        const attackersEmpty = this._spawnersAtk.map(s => s.isEmpty());
+        const defendersEmpty = this._spawnersDfd.map(s => s.isEmpty());
+        const uniqAtk = Array.from(new Set(attackersEmpty));
+        const uniqDfd = Array.from(new Set(defendersEmpty));
+        const noMoreAtk = !uniqAtk.includes(false);
+        const noMoreDfd = !uniqDfd.includes(false);
+        const isDoorDead = this._door.isDead();
+        const numAttackerqBeyondGate = this._attackersBeyondGate.length;
+        if (noMoreAtk || noMoreDfd) {
+            this.emit(BattleFieldEvent_1.default.GAME_OVER, {
+                noMoreAtk,
+                noMoreDfd,
+                isDoorDead,
+                numAttackerqBeyondGate
+            });
+        }
+    }
+    doCycle() {
+        this.spawnNewFighters();
+        this.searchForEnemies();
+        this.setFightersPath();
+        this.moveFighters();
         this.fight();
+        this.predictNextTargetNodes();
+        this.refreshLifebars();
+        this.checkAttackersBeyondDoor();
+        this.checkGameOver();
     }
 }
 exports.default = BattleField;

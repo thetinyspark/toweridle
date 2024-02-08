@@ -1,3 +1,4 @@
+import FighterType from "./FighterType";
 import SpawnerType from "./SpawnerType";
 declare type BattfleFieldDataType = {
     data: number[][];
@@ -8,5 +9,6 @@ declare type BattfleFieldDataType = {
     targetCol: number;
     attackerSpawners: SpawnerType[];
     defenderSpawners: SpawnerType[];
+    door: FighterType;
 };
 export default BattfleFieldDataType;

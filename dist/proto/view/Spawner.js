@@ -10,14 +10,9 @@ class Spawner extends moocaccino_barista_1.DisplayObjectContainer {
     }
     doCycle(factory) {
         this._numCycle++;
-        const alives = this._fighters.filter(f => f.hp > 0);
-        // on produit les combattants un par un
-        // et là il y en a encore au moins un en vie
-        if (this.info.oneByOne && alives.length > 0)
-            return null;
         // si on produit tous les x cycles et qu'on n'a pas encore 
         // atteint ce cap, alors on ne fait rien
-        if (!this.info.oneByOne && this._numCycle % this.info.frequency !== 0)
+        if (this._numCycle % this.info.frequency !== 0)
             return null;
         // si la réserve de fighters est épuisée alors on ne retourne rien
         if (this.info.fighters.length == 0)
@@ -45,6 +40,9 @@ class Spawner extends moocaccino_barista_1.DisplayObjectContainer {
     }
     getFighters() {
         return this._fighters;
+    }
+    isEmpty() {
+        return this.info.fighters.length === 0 && this.getFighters().length === 0;
     }
 }
 exports.default = Spawner;

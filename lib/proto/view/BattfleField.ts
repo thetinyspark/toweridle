@@ -3,20 +3,24 @@ import SpriteFactory from "../factory/SpriteFactory";
 import BattfleFieldDataType from "../types/BattleFieldDataType";
 import Spawner from "./Spawner";
 import Fighter from "./Fighter";
+import SpawnerType from "../types/SpawnerType";
+import BattleFieldEvent from "../event/BattleFieldEvent";
 
 export default class BattleField extends DisplayObjectContainer{
 
+    private _attackersBeyondGate:Fighter[] = [];
     private _spawnersAtk:Spawner[] = [];
     private _spawnersDfd:Spawner[] = [];
     private _level:BattfleFieldDataType = null;
     private _pathfinder:PathFinder2D = null;
     private _graphe:Grid2D<GameNode> = null;
+    private _door:Fighter = null;
 
     constructor(private _spriteFactory:SpriteFactory){
         super();
         this.addChild = this.addChild.bind(this);
         this.doCycle = this.doCycle.bind(this);
-        this.cycleLoop = this.cycleLoop.bind(this);
+        this.predictNextTargetNodes = this.predictNextTargetNodes.bind(this);
     }
 
     init(level:BattfleFieldDataType){
@@ -39,23 +43,47 @@ export default class BattleField extends DisplayObjectContainer{
         this._pathfinder = new PathFinder2D(); 
         this._graphe = this._pathfinder.createGraphe(grid, 0);
 
-        this.cycleLoop();
+        this.initDoor();
+    }
+
+    initDoor(){
+        this._door = this._spriteFactory.createFighter(
+            this._level.door, 
+            this._level.targetRow,
+            this._level.targetCol,
+            25
+        );
+
+        this.addChild(this._door);
+    }
+
+    getDefenders(withDoor:boolean = true){
+        const defenders = this._spawnersDfd.flatMap( s=>s.getFighters());
+
+        if( withDoor && !this._door.isDead() )
+            defenders.push(this._door);
+
+        return defenders;
+    }
+
+    getAttackers(){
+        return this._spawnersAtk.flatMap( s=>s.getFighters());
     }
 
     fight(){
-        const attackers = this._spawnersAtk.flatMap( s=>s.getFighters());
-        const defenders = this._spawnersDfd.flatMap( s=>s.getFighters());
+        const attackers = this.getAttackers();;
+        const defenders = this.getDefenders();
 
         // atk + def
         attackers.forEach( 
             (fighter)=>{
-                fighter.fight(defenders);
+                fighter.fight();
             }
         );
 
         defenders.forEach( 
             (fighter)=>{
-                fighter.fight( attackers);
+                fighter.fight();
             }
         );
 
@@ -81,50 +109,127 @@ export default class BattleField extends DisplayObjectContainer{
             )
         }
        );
+
+       if( this._door.isDead() && this.contains(this._door)){
+        this.removeChild(this._door);
+       }
     }
 
-    refresh(){
+    checkAttackersBeyondDoor(){
+        if( this._door.isDead() === false )
+            return;
 
-        const attackers = this._spawnersAtk.flatMap( s=>s.getFighters());
-        const defenders = this._spawnersDfd.flatMap( s=>s.getFighters());
+        const row = this._level.targetRow;
+        const col = this._level.targetCol;
 
-        // atk + def
+        // count attackers who passes the gate
+        this._spawnersAtk.forEach( 
+            (spawner)=>{
+                spawner.getFighters().filter( f=>f.row == row && f.col === col).forEach( 
+                    (fighter)=>{
+                        spawner.removeFighter(fighter);
+                        this.removeChild(fighter);
+                        this._attackersBeyondGate.push(fighter);
+                    }
+                )
+            }
+        );
+    }
+
+    refreshLifebars(){
+        const attackers = this.getAttackers();
+        const defenders = this.getDefenders();
+        const fighters = attackers.concat(defenders);
+
+        fighters.forEach( 
+            (fighter)=>{
+                fighter.refresh();
+            }
+        );
+    }
+
+    moveFighters(){
+
+        const attackers = this.getAttackers();;
+        const defenders = this.getDefenders();
+        const fighters = attackers.concat(defenders);
+
+        fighters.forEach( 
+            (fighter)=>{
+                fighter.move(25);
+            }
+        );
+
+    }
+
+    predictNextTargetNodes(){
+        const attackers = this.getAttackers();;
+        const defenders = this.getDefenders();
+        const fighters = attackers.concat(defenders);
+
+        fighters.forEach( 
+            (fighter)=>{
+                fighter.calculateNextTargetNode();
+            }
+        );
+    }
+
+    setFightersPath(){
+        const attackers = this.getAttackers();
+        const defenders = this.getDefenders();
+
         attackers.forEach( 
             (fighter)=>{
-                fighter.refresh(25);
+                const row = fighter.row;
+                const col = fighter.col;
+                const startNode = this._graphe.getAt(row, col);
+                const endNode = this._graphe.getAt(this._level.targetRow, this._level.targetCol);
+                const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
+                fighter.setPath(path);
             }
         );
 
         defenders.forEach( 
-            (fighter)=>{
-                fighter.refresh(25);
+            (fighter:Fighter)=>{
+
+                if( fighter.getPath().length > 0 )
+                    return;
+
+                const enemy = fighter.getClosestEnemy(attackers);
+                if( enemy == null ){
+                    return;
+                }
+                
+                const startNode = this._graphe.getAt(fighter.row, fighter.col);
+                const endNode = this._graphe.getAt(enemy.row, enemy.col);
+                const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
+                fighter.setPath(path);
             }
         );
-
     }
 
-    cycleLoop(){
-        this.doCycle(); 
-        setTimeout( 
-            ()=>{
-                this.cycleLoop()
-            }, 
-            this._level.cycleInMs
-        )
+    searchForEnemies(){
+        const attackers = this.getAttackers();;
+        const defenders = this.getDefenders();
+
+        attackers.forEach( 
+            (fighter)=>{
+                fighter.searchEnemy(defenders);
+            }
+        );
+        defenders.forEach( 
+            (fighter)=>{
+                fighter.searchEnemy(attackers);
+            }
+        );
     }
 
-    doCycle():void{
+    spawnNewFighters(){
         this._spawnersAtk.forEach( 
             (spawner)=>{
                 const fighter = spawner.doCycle(this._spriteFactory);
                 if( fighter !== null ){
                     this.addChild(fighter);
-                    const row = fighter.getRow();
-                    const col = fighter.getCol();
-                    const startNode = this._graphe.getAt(row, col);
-                    const endNode = this._graphe.getAt(this._level.targetRow, this._level.targetCol);
-                    const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
-                    fighter.setPath(path);
                 }
             }
         );
@@ -134,27 +239,44 @@ export default class BattleField extends DisplayObjectContainer{
                 const fighter = spawner.doCycle(this._spriteFactory);
                 if( fighter !== null )
                     this.addChild(fighter);
-
-                const attackers = this._spawnersAtk.flatMap( s=>s.getFighters());
-                spawner.getFighters().forEach( 
-                    (fighter:Fighter)=>{
-
-                        if( fighter.getPath().length > 0 )
-                            return;
-
-                        const enemy = fighter.getClosestEnemy(attackers);
-                        if( enemy == null )
-                            return;
-                        
-                        const startNode = this._graphe.getAt(fighter.getRow(), fighter.getCol());
-                        const endNode = this._graphe.getAt(enemy.getRow(), enemy.getCol());
-                        const path = this._pathfinder.findPath(this._graphe, startNode, endNode, false);
-                        fighter.setPath(path);
-                    }
-                )
             }
         );
+    }
 
+    checkGameOver(){
+        const attackersEmpty = this._spawnersAtk.map( s=>s.isEmpty());
+        const defendersEmpty = this._spawnersDfd.map( s=>s.isEmpty());
+
+        const uniqAtk = Array.from(new Set(attackersEmpty));
+        const uniqDfd = Array.from(new Set(defendersEmpty));
+
+        const noMoreAtk = !uniqAtk.includes(false);
+        const noMoreDfd = !uniqDfd.includes(false);
+        const isDoorDead = this._door.isDead();
+        const numAttackerqBeyondGate = this._attackersBeyondGate.length;
+
+        if(noMoreAtk || noMoreDfd ){
+            this.emit(
+                BattleFieldEvent.GAME_OVER, 
+                {
+                    noMoreAtk, 
+                    noMoreDfd, 
+                    isDoorDead, 
+                    numAttackerqBeyondGate
+                }
+            );
+        }
+    }
+
+    doCycle():void{
+        this.spawnNewFighters();
+        this.searchForEnemies();
+        this.setFightersPath();
+        this.moveFighters();
         this.fight();
+        this.predictNextTargetNodes();
+        this.refreshLifebars();
+        this.checkAttackersBeyondDoor();
+        this.checkGameOver();
     }
 }

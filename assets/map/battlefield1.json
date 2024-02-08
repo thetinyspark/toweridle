@@ -1,25 +1,36 @@
 {
     "id": "battlefield_1", 
     "title": "Plaine",
-    "cycleInMs":500,
+    "cycleInMs":20,
+    "simulate": false, 
     "attackerSpawners":[
         {
             "id": 1,
             "ownerID": 1,
             "fighters":[
                 {
-                    "id":1,
-                    "speed":0.5, 
-                    "atkPhy":3, 
+                    "id":2,
+                    "speed":1, 
+                    "atkPhy":500, 
                     "atkMag":0, 
                     "defPhy":0, 
                     "defMag":0, 
-                    "radius":200, 
+                    "radius":1, 
+                    "hp":50, 
+                    "amount": 1000
+                },
+                {
+                    "id":4,
+                    "speed":1, 
+                    "atkPhy":0, 
+                    "atkMag":10, 
+                    "defPhy":0, 
+                    "defMag":0, 
+                    "radius":1, 
                     "hp":500, 
-                    "amount": 20
+                    "amount": 1000
                 }
             ], 
-            "oneByOne": false,
             "frequency": 1,
             "row":14, 
             "col":11
@@ -32,22 +43,43 @@
             "fighters":[
                 {
                     "id":2,
-                    "speed":0.5, 
-                    "atkPhy":5, 
+                    "speed":1, 
+                    "atkPhy":500, 
                     "atkMag":0, 
                     "defPhy":0, 
                     "defMag":0, 
-                    "radius":50, 
+                    "radius":1, 
+                    "hp":50, 
+                    "amount": 1000
+                },
+                {
+                    "id":4,
+                    "speed":1, 
+                    "atkPhy":0, 
+                    "atkMag":10, 
+                    "defPhy":0, 
+                    "defMag":0, 
+                    "radius":1, 
                     "hp":500, 
-                    "amount": 5
+                    "amount": 1000
                 }
             ], 
-            "oneByOne": false,
             "frequency": 1,
             "row":3, 
             "col":11
         }
     ],
+    "door":{
+        "id":0,
+        "speed":1, 
+        "atkPhy":0, 
+        "atkMag":0, 
+        "defPhy":0, 
+        "defMag":0, 
+        "radius":0, 
+        "hp":5000, 
+        "amount": 1
+    },
     "targetRow": 0,
     "targetCol": 11,
     "data": [

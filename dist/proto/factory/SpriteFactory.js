@@ -4,6 +4,7 @@ const moocaccino_barista_1 = require("@thetinyspark/moocaccino-barista");
 const Spawner_1 = require("../view/Spawner");
 const Fighter_1 = require("../view/Fighter");
 const Lifebar_1 = require("../view/Lifebar");
+const Door_1 = require("../view/Door");
 class SpriteFactory {
     _textureFactory;
     constructor(_textureFactory) {
@@ -41,6 +42,9 @@ class SpriteFactory {
     createFighter(from, row, col, size = 25) {
         let key = "";
         switch (from.id) {
+            case 0:
+                key = "door";
+                break;
             case 1:
                 key = "archer";
                 break;
@@ -58,7 +62,7 @@ class SpriteFactory {
         disp.width = size;
         disp.height = size;
         const lifebar = this.createLifebar(from.hp);
-        const fighter = new Fighter_1.default();
+        const fighter = from.id == 0 ? new Door_1.default() : new Fighter_1.default();
         fighter.init(from, row, col, size);
         fighter.addChild(disp);
         fighter.addLifeBar(lifebar);

@@ -4,11 +4,14 @@ const moocaccino_barista_1 = require("@thetinyspark/moocaccino-barista");
 class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
     info;
     hp;
+    row = 0;
+    col = 0;
     targetX = 0;
     targetY = 0;
     _path = [];
     _lifebar = null;
     _currentEnemy = null;
+    _nextTargetNode = null;
     addLifeBar(lifeBar) {
         this._lifebar = lifeBar;
         this.addChild(lifeBar);
@@ -16,6 +19,8 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
     init(info, row, col, size = 25) {
         this.info = info;
         this.hp = this.info.hp;
+        this.row = row;
+        this.col = col;
         this.targetX = this.x = col * size;
         this.targetY = this.y = row * size;
         this.targetX = this.x;
@@ -27,16 +32,16 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
     getPath() {
         return this._path;
     }
-    getRow(cellSize = 25) {
-        return Math.round(this.y / cellSize);
-    }
-    getCol(cellSize = 25) {
-        return Math.round(this.x / cellSize);
-    }
-    fight(enemies) {
+    searchEnemy(enemies) {
         const inRadius = this.getEnemiesAround(enemies);
         const enemy = this.getClosestEnemy(inRadius);
         this._currentEnemy = enemy;
+    }
+    getCurrentEnemy() {
+        return this._currentEnemy;
+    }
+    fight() {
+        const enemy = this._currentEnemy;
         if (enemy == null)
             return;
         let phyDmg = this.info.atkPhy - enemy.info.defPhy;
@@ -47,18 +52,16 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
         enemy.hp = enemy.hp < 0 ? 0 : enemy.hp;
         enemy.hp = enemy.hp > enemy.info.hp ? enemy.info.hp : enemy.hp;
     }
-    refresh(cellSize) {
-        if (this._currentEnemy == null)
-            return this.move(cellSize);
+    refresh() {
         if (this._lifebar) {
             this._lifebar.refresh(this.hp);
         }
     }
     getEnemiesAround(enemies) {
         const inRadius = enemies.filter((enemy) => {
-            const distX = enemy.x - this.x;
-            const distY = enemy.y - this.y;
-            const dist = Math.sqrt(distX * distX + distY * distY);
+            const distRow = enemy.row - this.row;
+            const distCol = enemy.col - this.col;
+            const dist = Math.sqrt(distRow * distRow + distCol * distCol);
             return dist <= this.info.radius;
         });
         return inRadius;
@@ -68,9 +71,9 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
         let minDist = 0;
         for (let i = 0; i < enemies.length; i++) {
             const enemy = enemies[i];
-            const distX = enemy.x - this.x;
-            const distY = enemy.y - this.y;
-            const dist = Math.sqrt(distX * distX + distY * distY);
+            const distRoW = enemy.row - this.row;
+            const distCol = enemy.col - this.col;
+            const dist = Math.sqrt(distRoW * distRoW + distCol * distCol);
             if (i == 0 || dist < minDist) {
                 closest = enemies[i];
                 minDist = dist;
@@ -78,13 +81,41 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
         }
         return closest;
     }
+    calculateNextTargetNode() {
+        const path = this._path;
+        // si on est au bout du chemin alors on ne fait rien
+        if (path.length == 0) {
+            this._nextTargetNode = null;
+            return;
+        }
+        // s'il ne reste plus assez de cases à parcourir, (par rapport à notre vitesse),
+        // alors, la dernière case est forcément notre cible
+        // NOTA BENE on ajoute + 1 car la case où l'on se trouve est comprise dans le chemin
+        const numCells = Math.round(this.info.speed) + 1;
+        if (path.length < numCells) {
+            this._nextTargetNode = path[path.length - 1];
+        }
+        else {
+            this._nextTargetNode = path[numCells - 1];
+        }
+    }
     move(cellSize = 25) {
+        if (this._nextTargetNode === null || this._currentEnemy !== null)
+            return;
+        this.row = this._nextTargetNode.state.row;
+        this.col = this._nextTargetNode.state.col;
+        this.x = this._nextTargetNode.state.col * cellSize;
+        this.y = this._nextTargetNode.state.row * cellSize;
+        const index = this._path.indexOf(this._nextTargetNode);
+        this._path.splice(0, index);
+        this._nextTargetNode = null;
+        return;
         const path = this._path;
         if (path.length == 0)
             return;
         // on vérifie la case sur laquelle on se trouve
-        const row = this.getRow(cellSize);
-        const col = this.getCol(cellSize);
+        const row = this.row;
+        const col = this.col;
         // puis on vérifie si c'est la première case du chemin
         if (path[0].state.col == col && path[0].state.row == row) {
             const targetX = path[0].state.col * cellSize;
@@ -108,6 +139,9 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
         const speedY = distY > 0 ? this.info.speed : distY < 0 ? -this.info.speed : 0;
         this.x += speedX;
         this.y += speedY;
+    }
+    isDead() {
+        return this.hp <= 0;
     }
     constructor() {
         super();

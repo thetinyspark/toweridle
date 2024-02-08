@@ -5,6 +5,7 @@ import Spawner from "../view/Spawner";
 import FighterType from "../types/FighterType";
 import Fighter from "../view/Fighter";
 import Lifebar from "../view/Lifebar";
+import Door from "../view/Door";
 
 export default class SpriteFactory {
   constructor(private _textureFactory:TextureFactory){
@@ -45,6 +46,7 @@ export default class SpriteFactory {
   public createFighter(from:FighterType, row:number, col:number, size:number = 25):Fighter{
     let key = ""; 
     switch( from.id){
+      case 0 : key = "door"; break; 
       case 1 : key = "archer"; break; 
       case 2 : key = "monk"; break; 
       case 3 : key = "knight"; break; 
@@ -55,7 +57,7 @@ export default class SpriteFactory {
     disp.height = size;
 
     const lifebar = this.createLifebar(from.hp);
-    const fighter = new Fighter();
+    const fighter = from.id == 0 ? new Door(): new Fighter();
     fighter.init(from, row, col, size);
     fighter.addChild(disp);
     fighter.addLifeBar(lifebar);
