@@ -71,7 +71,7 @@ export default class Main{
     }
 
     renderLoop(){
-        // this._battleField.refresh();
+        this._battleField.interpolate();
         this._stage.nextFrame();
         window.requestAnimationFrame(this.renderLoop);
     }

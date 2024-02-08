@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const moocaccino_barista_1 = require("@thetinyspark/moocaccino-barista");
+const MoveAlongPath_1 = require("../utils/MoveAlongPath");
 class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
     info;
     hp;
@@ -12,6 +13,7 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
     _lifebar = null;
     _currentEnemy = null;
     _nextTargetNode = null;
+    _mover = new MoveAlongPath_1.default();
     addLifeBar(lifeBar) {
         this._lifebar = lifeBar;
         this.addChild(lifeBar);
@@ -61,7 +63,7 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
         const inRadius = enemies.filter((enemy) => {
             const distRow = enemy.row - this.row;
             const distCol = enemy.col - this.col;
-            const dist = Math.sqrt(distRow * distRow + distCol * distCol);
+            const dist = Math.abs(Math.sqrt(distRow * distRow + distCol * distCol));
             return dist <= this.info.radius;
         });
         return inRadius;
@@ -73,7 +75,7 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
             const enemy = enemies[i];
             const distRoW = enemy.row - this.row;
             const distCol = enemy.col - this.col;
-            const dist = Math.sqrt(distRoW * distRoW + distCol * distCol);
+            const dist = Math.abs(Math.sqrt(distRoW * distRoW + distCol * distCol));
             if (i == 0 || dist < minDist) {
                 closest = enemies[i];
                 minDist = dist;
@@ -81,7 +83,7 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
         }
         return closest;
     }
-    calculateNextTargetNode() {
+    calculateNextTargetNode(cellSize = 25) {
         const path = this._path;
         // si on est au bout du chemin alors on ne fait rien
         if (path.length == 0) {
@@ -98,47 +100,31 @@ class Fighter extends moocaccino_barista_1.DisplayObjectContainer {
         else {
             this._nextTargetNode = path[numCells - 1];
         }
+        if (this._nextTargetNode === null)
+            return;
+        const index = this._path.indexOf(this._nextTargetNode);
+        const minipath = this._path.slice(0, index + 1);
+        const points = minipath.map(node => {
+            return { x: node.state.col * cellSize, y: node.state.row * cellSize };
+        });
+        this._mover.calc(this, points, 60);
     }
-    move(cellSize = 25) {
+    interpolate(cellSize = 25) {
+        if (this._nextTargetNode === null || this._currentEnemy !== null)
+            return;
+        this._mover.nextFrame();
+    }
+    move() {
         if (this._nextTargetNode === null || this._currentEnemy !== null)
             return;
         this.row = this._nextTargetNode.state.row;
         this.col = this._nextTargetNode.state.col;
-        this.x = this._nextTargetNode.state.col * cellSize;
-        this.y = this._nextTargetNode.state.row * cellSize;
+        this.x = this.col * 25;
+        this.y = this.row * 25;
         const index = this._path.indexOf(this._nextTargetNode);
         this._path.splice(0, index);
         this._nextTargetNode = null;
         return;
-        const path = this._path;
-        if (path.length == 0)
-            return;
-        // on vérifie la case sur laquelle on se trouve
-        const row = this.row;
-        const col = this.col;
-        // puis on vérifie si c'est la première case du chemin
-        if (path[0].state.col == col && path[0].state.row == row) {
-            const targetX = path[0].state.col * cellSize;
-            const targetY = path[0].state.row * cellSize;
-            const distX = targetX - this.x;
-            const distY = targetY - this.y;
-            // si c'est le cas on la retire du chemin
-            if (Math.abs(distX) <= this.info.speed && Math.abs(distY) <= this.info.speed) {
-                path.shift();
-                // si il ne reste plus aucune case alors on est arrivé à destination
-                if (path.length == 0)
-                    return;
-            }
-        }
-        // sinon on définit la prochaine cible
-        const targetX = path[0].state.col * cellSize;
-        const targetY = path[0].state.row * cellSize;
-        const distX = targetX - this.x;
-        const distY = targetY - this.y;
-        const speedX = distX > 0 ? this.info.speed : distX < 0 ? -this.info.speed : 0;
-        const speedY = distY > 0 ? this.info.speed : distY < 0 ? -this.info.speed : 0;
-        this.x += speedX;
-        this.y += speedY;
     }
     isDead() {
         return this.hp <= 0;

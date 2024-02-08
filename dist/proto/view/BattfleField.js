@@ -42,7 +42,7 @@ class BattleField extends moocaccino_barista_1.DisplayObjectContainer {
     }
     getDefenders(withDoor = true) {
         const defenders = this._spawnersDfd.flatMap(s => s.getFighters());
-        if (withDoor && !this._door.isDead())
+        if (this._door != null && withDoor && !this._door.isDead())
             defenders.push(this._door);
         return defenders;
     }
@@ -105,7 +105,7 @@ class BattleField extends moocaccino_barista_1.DisplayObjectContainer {
         const defenders = this.getDefenders();
         const fighters = attackers.concat(defenders);
         fighters.forEach((fighter) => {
-            fighter.move(25);
+            fighter.move();
         });
     }
     predictNextTargetNodes() {
@@ -129,8 +129,6 @@ class BattleField extends moocaccino_barista_1.DisplayObjectContainer {
             fighter.setPath(path);
         });
         defenders.forEach((fighter) => {
-            if (fighter.getPath().length > 0)
-                return;
             const enemy = fighter.getClosestEnemy(attackers);
             if (enemy == null) {
                 return;
@@ -186,13 +184,24 @@ class BattleField extends moocaccino_barista_1.DisplayObjectContainer {
     doCycle() {
         this.spawnNewFighters();
         this.searchForEnemies();
-        this.setFightersPath();
         this.moveFighters();
+        this.setFightersPath();
         this.fight();
         this.predictNextTargetNodes();
         this.refreshLifebars();
         this.checkAttackersBeyondDoor();
         this.checkGameOver();
+    }
+    interpolate() {
+        // return;
+        const attackers = this.getAttackers();
+        const defenders = this.getDefenders();
+        attackers.forEach((fighter) => {
+            fighter.interpolate(25);
+        });
+        defenders.forEach((fighter) => {
+            fighter.interpolate(25);
+        });
     }
 }
 exports.default = BattleField;

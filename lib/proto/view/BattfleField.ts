@@ -3,7 +3,6 @@ import SpriteFactory from "../factory/SpriteFactory";
 import BattfleFieldDataType from "../types/BattleFieldDataType";
 import Spawner from "./Spawner";
 import Fighter from "./Fighter";
-import SpawnerType from "../types/SpawnerType";
 import BattleFieldEvent from "../event/BattleFieldEvent";
 
 export default class BattleField extends DisplayObjectContainer{
@@ -60,7 +59,7 @@ export default class BattleField extends DisplayObjectContainer{
     getDefenders(withDoor:boolean = true){
         const defenders = this._spawnersDfd.flatMap( s=>s.getFighters());
 
-        if( withDoor && !this._door.isDead() )
+        if( this._door != null && withDoor && !this._door.isDead() )
             defenders.push(this._door);
 
         return defenders;
@@ -149,17 +148,15 @@ export default class BattleField extends DisplayObjectContainer{
     }
 
     moveFighters(){
-
         const attackers = this.getAttackers();;
         const defenders = this.getDefenders();
         const fighters = attackers.concat(defenders);
 
         fighters.forEach( 
             (fighter)=>{
-                fighter.move(25);
+                fighter.move();
             }
         );
-
     }
 
     predictNextTargetNodes(){
@@ -191,10 +188,6 @@ export default class BattleField extends DisplayObjectContainer{
 
         defenders.forEach( 
             (fighter:Fighter)=>{
-
-                if( fighter.getPath().length > 0 )
-                    return;
-
                 const enemy = fighter.getClosestEnemy(attackers);
                 if( enemy == null ){
                     return;
@@ -271,12 +264,28 @@ export default class BattleField extends DisplayObjectContainer{
     doCycle():void{
         this.spawnNewFighters();
         this.searchForEnemies();
-        this.setFightersPath();
         this.moveFighters();
+        this.setFightersPath();
         this.fight();
         this.predictNextTargetNodes();
         this.refreshLifebars();
         this.checkAttackersBeyondDoor();
         this.checkGameOver();
+    }
+
+    interpolate():void{
+        // return;
+        const attackers = this.getAttackers();
+        const defenders = this.getDefenders();
+        attackers.forEach( 
+            (fighter)=>{
+                fighter.interpolate(25);
+            }
+        );
+        defenders.forEach( 
+            (fighter)=>{
+                fighter.interpolate(25);
+            }
+        );
     }
 }

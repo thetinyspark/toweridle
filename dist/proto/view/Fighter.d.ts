@@ -12,6 +12,7 @@ export default class Fighter extends DisplayObjectContainer {
     private _lifebar;
     private _currentEnemy;
     private _nextTargetNode;
+    private _mover;
     addLifeBar(lifeBar: Lifebar): void;
     init(info: FighterType, row: number, col: number, size?: number): void;
     setPath(path: GameNode[]): void;
@@ -22,8 +23,9 @@ export default class Fighter extends DisplayObjectContainer {
     refresh(): void;
     getEnemiesAround(enemies: Fighter[]): Fighter[];
     getClosestEnemy(enemies: Fighter[]): any;
-    calculateNextTargetNode(): void;
-    move(cellSize?: number): void;
+    calculateNextTargetNode(cellSize?: number): void;
+    interpolate(cellSize?: number): void;
+    move(): void;
     isDead(): boolean;
     constructor();
 }

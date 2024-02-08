@@ -57,7 +57,7 @@ class Main {
         console.log("game over", notif.getPayload());
     }
     renderLoop() {
-        // this._battleField.refresh();
+        this._battleField.interpolate();
         this._stage.nextFrame();
         window.requestAnimationFrame(this.renderLoop);
     }

@@ -26,4 +26,5 @@ export default class BattleField extends DisplayObjectContainer {
     spawnNewFighters(): void;
     checkGameOver(): void;
     doCycle(): void;
+    interpolate(): void;
 }
