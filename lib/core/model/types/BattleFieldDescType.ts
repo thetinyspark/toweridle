@@ -1,10 +1,15 @@
-import { GameNode, Grid2D } from "@thetinyspark/moocaccino-barista";
-import Spawner from "../schema/Spawner";
+import { SpawnerDescType } from "./SpawnerDescType";
+import { FighterDescType } from "./FighterDescType";
 
 export type BattleFieldDescType = {
     id:number, 
+    name:string,
     attackerID:number, 
     defenderID:number,
-    spawners:Spawner[],
-    grid:Grid2D<GameNode>
+    atkSpawners:SpawnerDescType[],
+    dfdSpawners:SpawnerDescType[],
+    door:FighterDescType,
+    targetRow:number,
+    targetCol:number,
+    grid:number[][]
 };

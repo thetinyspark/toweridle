@@ -1,14 +1,16 @@
 export default class Fighter{
     constructor(
-        public id:number = -1, 
-        public tplID:number = -1,
-        public name:string = "",
-        public speed:number = 0,
-        public range:number = 0,
-        public phyAtk:number = 0,
-        public phyDef:number = 0,
-        public magAtk:number = 0,
-        public magDef:number = 0,
-        public hp:number = 0
+        public id:number, 
+        public tplID:number, 
+        public name:string,
+        public speed:number ,
+        public radius:number,
+        public phyAtk:number ,
+        public phyDef:number ,
+        public magAtk:number ,
+        public magDef:number ,
+        public hp:number,
+        public row:number = 0, 
+        public col:number = 0,
     ){}
 }

@@ -1,140 +1,120 @@
-import Fighter from "../lib/core/model/schema/Fighter";
-import FighterTemplate from "../lib/core/model/schema/FighterTemplate";
 import { FighterDescType } from "../lib/core/model/types/FighterDescType";
-import { GameDataType } from "../lib/core/model/types/GameDataType";
-import { FighterTemplateDescType } from "../lib/core/model/types/FighterTemplateDescType";
+import { FighterPoolDescType } from "../lib/core/model/types/FighterPoolDescType";
+import { SpawnerDescType } from "../lib/core/model/types/SpawnerDescType";
+import { BattleFieldDescType } from "../lib/core/model/types/BattleFieldDescType";
 
-// game data type
-export function GAME_SAVE_DESC():GameDataType{
+export function DOOR_DESC_TYPE():FighterDescType{
     return {
-        templates: [ARCHER_LVL1_TPL_DESC(), WIZARD_LVL1_TPL_DESC(), KNIGHT_LVL1_TPL_DESC(), MONK_LVL1_TPL_DESC()]
+        id: 1, 
+        tplID: 3,
+        name: "door",
+        hp: 5000, 
+        magAtk: 0, 
+        magDef: 0, 
+        phyAtk: 0, 
+        phyDef: 0, 
+        radius: 0, 
+        speed: 0, 
     }
 }
 
-// template fighters desc
-export function ARCHER_LVL1_TPL_DESC():FighterTemplateDescType{
+export function ARCHER_DESC_TYPE():FighterDescType{
     return {
         id: 1, 
-        name: "Archer Lvl 1", 
-        hp: 100, 
+        tplID: 1,
+        name: "archer",
+        hp: 500, 
         magAtk: 0, 
-        magDef: 0, 
-        phyAtk: 2, 
-        phyDef: 0, 
-        range: 10, 
-        speed: 2
+        magDef: 2, 
+        phyAtk: 10, 
+        phyDef: 5, 
+        radius: 4, 
+        speed: 1, 
     }
-};
-
-export function WIZARD_LVL1_TPL_DESC():FighterTemplateDescType{
-    return {
-        id: 2, 
-        name: "Wizard Lvl 1", 
-        hp: 100, 
-        magAtk: 2, 
-        magDef: 0, 
-        phyAtk: 0, 
-        phyDef: 0, 
-        range: 10, 
-        speed: 2
-    }
-};
-
-export function KNIGHT_LVL1_TPL_DESC():FighterTemplateDescType{
-    return {
-        id: 3, 
-        name: "Knight Lvl 1", 
-        hp: 100, 
-        magAtk: 0, 
-        magDef: 0, 
-        phyAtk: 5, 
-        phyDef: 0, 
-        range: 2, 
-        speed: 3
-    }
-};
-
-export function MONK_LVL1_TPL_DESC():FighterTemplateDescType{
-    return {
-        id: 4, 
-        name: "Monk Lvl 1", 
-        hp: 100, 
-        magAtk: 5, 
-        magDef: 0, 
-        phyAtk: 0, 
-        phyDef: 0, 
-        range: 2, 
-        speed: 3
-    }
-};
-
-
-// actual fighters desc
-export function ARCHER_LVL1_DESC():FighterDescType{
-    return {
-        id: 1, 
-        tplID: 1, 
-        name: "Archer Lvl 1", 
-        hp: 100, 
-        magAtk: 0, 
-        magDef: 0, 
-        phyAtk: 2, 
-        phyDef: 0, 
-        range: 10, 
-        speed: 2
-    }
-};
-
-export function WIZARD_LVL1_DESC():FighterDescType{
-    return {
-        id: 2, 
-        tplID: 2, 
-        name: "Wizard Lvl 1", 
-        hp: 100, 
-        magAtk: 2, 
-        magDef: 0, 
-        phyAtk: 0, 
-        phyDef: 0, 
-        range: 10, 
-        speed: 2
-    }
-};
-
-export function KNIGHT_LVL1_DESC():FighterDescType{
-    return {
-        id: 3, 
-        tplID: 3, 
-        name: "Knight Lvl 1", 
-        hp: 100, 
-        magAtk: 0, 
-        magDef: 0, 
-        phyAtk: 5, 
-        phyDef: 0, 
-        range: 2, 
-        speed: 3
-    }
-};
-
-export function MONK_LVL1_DESC():FighterDescType{
-    return {
-        id: 4, 
-        tplID:4,
-        name: "Monk Lvl 1", 
-        hp: 100, 
-        magAtk: 5, 
-        magDef: 0, 
-        phyAtk: 0, 
-        phyDef: 0, 
-        range: 2, 
-        speed: 3
-    }
-};
-
-
-export function createFighterTemplate(desc:FighterTemplateDescType):FighterTemplate{
-    return new FighterTemplate( desc.id, desc.name, desc.speed, desc.range, desc.phyAtk, desc.phyDef, desc.magAtk, desc.magDef, desc.hp);
 }
 
-export function createFighter(desc:FighterDescType):Fighter{
-    return new Fighter( desc.id, desc.tplID, desc.name, desc.speed, desc.range, desc.phyAtk, desc.phyDef, desc.magAtk, desc.magDef, desc.hp);
+export function KNIGH_DESC_TYPE():FighterDescType{
+    return {
+        id: 1, 
+        tplID: 2,
+        name: "knight",
+        hp: 500, 
+        magAtk: 0, 
+        magDef: 0, 
+        phyAtk: 20, 
+        phyDef: 10, 
+        radius: 1, 
+        speed: 2, 
+    }
+}
+
+export function ARCHERS_POOL(amount:number = 10):FighterPoolDescType{
+    return {
+        amount, 
+        desc: ARCHER_DESC_TYPE()
+    }
+}
+
+export function SPAWNER1():SpawnerDescType{
+    return {
+        id: 1, 
+        col: 11, 
+        row : 14, 
+        fighters: [
+            ARCHERS_POOL()
+        ], 
+        frequency: 1, 
+        name: "spawner1", 
+        ownerID: 1
+    }
+
+}
+
+export function SPAWNER2():SpawnerDescType{
+    return {
+        id: 2, 
+        col: 11, 
+        row : 1, 
+        fighters: [
+            ARCHERS_POOL()
+        ], 
+        frequency: 1, 
+        name: "spawner2", 
+        ownerID: 2
+    }
+}
+
+export function PLAYGROUND():number[][]{
+    return  [
+        [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1],
+        [1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,0,1,1,1,0,1],
+        [1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1],
+        [1,1,1,1,1,1,1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1],
+        [1,0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1],
+        [1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,0,1,0,1,1,1,1,1],
+        [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,1],
+        [1,0,1,1,1,1,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1],
+        [1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,1],
+        [1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,0,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1]
+    ]
+}
+
+export function BATTLEFIELD1():BattleFieldDescType{
+    return {
+        id: 1,
+        name: "plaines ensanglantées",
+        atkSpawners: [SPAWNER1()],
+        dfdSpawners: [SPAWNER2()],
+        attackerID: 1, 
+        defenderID: 2, 
+        door: DOOR_DESC_TYPE(), 
+        grid: PLAYGROUND(), 
+        targetCol: 11,
+        targetRow: 11,
+    }
 }

@@ -1,24 +1,17 @@
-import { Container, Facade } from "@thetinyspark/coffe-maker";
+import { StoreModel } from "@thetinyspark/coffe-maker";
 import IRepository from "../../../../lib/core/model/repository/IRepository";
-import { setup } from "../../../setup.spec";
-import AppConst from "../../../../lib/core/ioc/app.const";
-import { ARCHER_LVL1_TPL_DESC, KNIGHT_LVL1_TPL_DESC, MONK_LVL1_TPL_DESC, WIZARD_LVL1_TPL_DESC, createFighterTemplate } from "../../../mock.spec";
-import FighterTemplate from "../../../../lib/core/model/schema/FighterTemplate";
-import Fighter from "../../../../lib/core/model/schema/Fighter";
+import Repository from "../../../../lib/core/model/repository/Repository";
 
 describe('IRepository test suite', 
 ()=>{
 
-    
-    var repository:IRepository<FighterTemplate>;
-
-    beforeAll( 
-        ()=>{
-            const container = new Container();
-            const facade:Facade = setup(container);
-            repository = container.resolve(AppConst.FIGHTERS_REPOSITORY) as IRepository<Fighter>;
-        }
-    ); 
+    class Dummy{
+        constructor(
+            public id:number = 0,
+            public name:string = ""
+        ){}
+    }
+    const repository:IRepository<Dummy> = new Repository<Dummy>(new StoreModel(), "dummies");
 
     beforeEach( 
         ()=>{
@@ -29,16 +22,16 @@ describe('IRepository test suite',
     it('should be able to reset a repository for a specific type', 
     ()=>{
         // when 
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
+        repository.add(new Dummy(1,"coucou"));
+        repository.add(new Dummy(2,"coucou"));
+        repository.add(new Dummy(3,"coucou"));
+        repository.add(new Dummy(4,"coucou"));
         repository.reset();
         
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(KNIGHT_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(WIZARD_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(MONK_LVL1_TPL_DESC()));
+        repository.add(new Dummy(1,"coucou"));
+        repository.add(new Dummy(2,"coucou"));
+        repository.add(new Dummy(3,"coucou"));
+        repository.add(new Dummy(4,"coucou"));
         repository.reset();
         const results = repository.getAll();
 
@@ -55,47 +48,46 @@ describe('IRepository test suite',
     it('should be able to add elements on a repository and retrieve them all', 
     ()=>{
         // when 
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(KNIGHT_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(WIZARD_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(MONK_LVL1_TPL_DESC()));
+        repository.add(new Dummy(1,"coucou"));
+        repository.add(new Dummy(2,"coucou"));
+        repository.add(new Dummy(3,"coucou"));
+        repository.add(new Dummy(4,"coucou"));
         const results = repository.getAll();
 
         // when then
         expect(results.length).toEqual(4);
-        expect(results[0].id).toEqual(ARCHER_LVL1_TPL_DESC().id);
-        expect(results[1].id).toEqual(KNIGHT_LVL1_TPL_DESC().id);
-        expect(results[2].id).toEqual(WIZARD_LVL1_TPL_DESC().id);
-        expect(results[3].id).toEqual(MONK_LVL1_TPL_DESC().id);
+        expect(results[0].id).toEqual(1);
+        expect(results[1].id).toEqual(2);
+        expect(results[2].id).toEqual(3);
+        expect(results[3].id).toEqual(4);
     }); 
 
     it('should be able to add elements on a repository and remove one', 
     ()=>{
         // when 
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(KNIGHT_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(WIZARD_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(MONK_LVL1_TPL_DESC()));
+        repository.add(new Dummy(1,"coucou"));
+        repository.add(new Dummy(2,"coucou"));
+        repository.add(new Dummy(3,"coucou"));
+        repository.add(new Dummy(4,"coucou"));
 
         repository.remove(repository.getAll()[1]);
         const results = repository.getAll();
 
         // when then
         expect(results.length).toEqual(3);
-        expect(results[0].id).toEqual(ARCHER_LVL1_TPL_DESC().id);
-        expect(results[1].id).toEqual(WIZARD_LVL1_TPL_DESC().id);
-        expect(results[2].id).toEqual(MONK_LVL1_TPL_DESC().id);
+        expect(results[0].id).toEqual(1);
+        expect(results[1].id).toEqual(3);
+        expect(results[2].id).toEqual(4);
     }); 
 
     it('should be able to add elements on a repository and retrieve those with specific criteria', 
     ()=>{
         // when 
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(KNIGHT_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(WIZARD_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(MONK_LVL1_TPL_DESC()));
-        const results = repository.getAllBy("id",ARCHER_LVL1_TPL_DESC().id);
+        repository.add(new Dummy(1,"coucou"));
+        repository.add(new Dummy(1,"coucou"));
+        repository.add(new Dummy(3,"coucou"));
+        repository.add(new Dummy(4,"coucou"));
+        const results = repository.getAllBy("id",1);
 
         // when then
         expect(results.length).toEqual(2);
@@ -106,11 +98,10 @@ describe('IRepository test suite',
     it('should be able to add elements on a repository and retrieve one with specific criteria', 
     ()=>{
         // when 
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(ARCHER_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(KNIGHT_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(WIZARD_LVL1_TPL_DESC()));
-        repository.add(createFighterTemplate(MONK_LVL1_TPL_DESC()));
+        repository.add(new Dummy(1,"coucou"));
+        repository.add(new Dummy(2,"coucou"));
+        repository.add(new Dummy(3,"coucou"));
+        repository.add(new Dummy(4,"coucou"));
         const results = repository.getOneBy("id",1);
 
         // when then

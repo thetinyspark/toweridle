@@ -35,7 +35,6 @@
   "homepage": "https://github.com/thetinyspark/toweridle#readme",
   "dependencies": {
     "@thetinyspark/coffe-maker": "^1.4.5",
-    "@thetinyspark/moocaccino-barista": "^2.13.3",
     "@thetinyspark/texture-packer": "^1.12.2",
     "@thetinyspark/tiny-observer": "^1.4.0",
     "typescript": "^4.3.5"

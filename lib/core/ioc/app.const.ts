@@ -12,14 +12,16 @@ export default class AppConst{
     static DO_CYCLE:string                      = "DoCycle";
 
     // repositories
-    static FIGHTERS_REPOSITORY:string          = "FightersRepository";;
-    static FIGHTERS_TPL_REPOSITORY:string      = "FightersTplRepository";;
+    static FIGHTERS_REPOSITORY:string          = "FightersRepository";
+    static SPAWNERS_REPOSITORY:string          = "SpawnersRepository";
+    static BATTLEFIELD_REPOSITORY:string       = "BattleFieldRepository";
 
     // factories
     static FIGHTER_FACTORY:string              = "FighterFactory";
-    static FIGHTER_TPL_FACTORY:string          = "FighterTemplateFactory";
+    static SPAWNER_FACTORY:string              = "SpawnerFactory";
+    static BATTLEFIELD_FACTORY:string          = "BattleFieldFactory";
     
     // services
-    static UID_SERVICE:string                   = "UIDService";
-    static SERIALIZER_SERVICE:string            = "SerializerService";
+    static UID_SERVICE:string                  = "UIDService";
+    static SERIALIZER_SERVICE:string           = "SerializerService";
 }

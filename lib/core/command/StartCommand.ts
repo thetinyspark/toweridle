@@ -2,7 +2,6 @@ import { Facade, ICommand } from "@thetinyspark/coffe-maker";
 import { INotification } from "@thetinyspark/tiny-observer";
 import AppConst from "../ioc/app.const";
 import IRepository from "../model/repository/IRepository";
-import FighterTemplate from "../model/schema/FighterTemplate";
 import IFactory from "../service/factory/IFactory";
 
 /**
@@ -19,14 +18,14 @@ export default class StartCommand implements ICommand{
         const facade:Facade = notification.getEmitter() as Facade;
         const data:any = notification.getPayload() as any; 
         
-        const tplRepo = facade.getProxy(AppConst.FIGHTERS_TPL_REPOSITORY) as IRepository<FighterTemplate>;
-        const factory:IFactory = facade.getService(AppConst.FIGHTER_TPL_FACTORY) as IFactory;
+        // const tplRepo = facade.getProxy(AppConst.FIGHTERS_TPL_REPOSITORY) as IRepository<FighterTemplate>;
+        // const factory:IFactory = facade.getService(AppConst.FIGHTER_TPL_FACTORY) as IFactory;
 
-        data?.templates.forEach(
-            (current:any)=>{
-                tplRepo.add(factory.fromData(current));
-            }
-        );
+        // data?.templates.forEach(
+        //     (current:any)=>{
+        //         tplRepo.add(factory.fromData(current));
+        //     }
+        // );
         return true;
 
 

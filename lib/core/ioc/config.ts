@@ -5,8 +5,10 @@ import UIDService from "../service/UIDService";
 import { StartCommand } from "../command";
 import FightersRepository from "../model/repository/FightersRepository";
 import FighterFactory from "../service/factory/FighterFactory";
-import FighterTplFactory from "../service/factory/FighterTplFactory";
-import FightersTplRepository from "../model/repository/FightersTplRepository";
+import SpawnerFactory from "../service/factory/SpawnerFactory";
+import SpawnersRepository from "../model/repository/SpawnersRepository";
+import BattleFieldRepository from "../model/repository/BattleFieldRepository";
+import BattleFieldFactory from "../service/factory/BattleFieldFactory";
 
 export function configIOC(container:Container){
     container.reset();
@@ -20,13 +22,31 @@ export function configIOC(container:Container){
 
     // repositories
     container.register(AppConst.FIGHTERS_REPOSITORY             ,   ()=>  new FightersRepository(container.resolve(AppConst.GAME_STORE_MODEL), "fighters")          , true      );
-    container.register(AppConst.FIGHTERS_TPL_REPOSITORY         ,   ()=>  new FightersTplRepository(container.resolve(AppConst.GAME_STORE_MODEL), "fighters_tpl")   , true      );
+    container.register(AppConst.SPAWNERS_REPOSITORY             ,   ()=>  new SpawnersRepository(container.resolve(AppConst.GAME_STORE_MODEL), "spawners")          , true      );
+    container.register(AppConst.BATTLEFIELD_REPOSITORY          ,   ()=>  new BattleFieldRepository(container.resolve(AppConst.GAME_STORE_MODEL), "battlefields")   , true      );
 
     // services
-    container.register( AppConst.FIGHTER_TPL_FACTORY            ,   ()=>  new FighterTplFactory(container.resolve(AppConst.UID_SERVICE))                            , true      );
     container.register( AppConst.FIGHTER_FACTORY                ,   ()=>  new FighterFactory(container.resolve(AppConst.UID_SERVICE))                               , true      );
     container.register( AppConst.SERIALIZER_SERVICE             ,   ()=>  new SerializerService()                                                                   , true      );
     container.register( AppConst.UID_SERVICE                    ,   ()=>  new UIDService()                                                                          , true      );
+
+    // complex services
+    container.register( AppConst.SPAWNER_FACTORY,   
+                        ()=>  new SpawnerFactory(
+                            container.resolve(AppConst.UID_SERVICE), 
+                            container.resolve(AppConst.FIGHTER_FACTORY)
+                        ), 
+                        true      
+                    );
+
+    container.register( AppConst.BATTLEFIELD_FACTORY,   
+                        ()=>  new BattleFieldFactory(
+                            container.resolve(AppConst.UID_SERVICE), 
+                            container.resolve(AppConst.SPAWNER_FACTORY),
+                            container.resolve(AppConst.FIGHTER_FACTORY)
+                        ), 
+                        true      
+                    );
     return container;
 }
 
@@ -38,12 +58,14 @@ export function configFacade(container:Container){
 
     //repositories
     facade.registerProxy( AppConst.FIGHTERS_REPOSITORY      , container.resolve(AppConst.FIGHTERS_REPOSITORY)       );
-    facade.registerProxy( AppConst.FIGHTERS_TPL_REPOSITORY  , container.resolve(AppConst.FIGHTERS_TPL_REPOSITORY)   );
+    facade.registerProxy( AppConst.SPAWNERS_REPOSITORY      , container.resolve(AppConst.SPAWNERS_REPOSITORY)       );
+    facade.registerProxy( AppConst.BATTLEFIELD_REPOSITORY   , container.resolve(AppConst.BATTLEFIELD_REPOSITORY) );
 
     // services
     facade.registerService( AppConst.UID_SERVICE            , container.resolve(AppConst.UID_SERVICE)               );
     facade.registerService( AppConst.SERIALIZER_SERVICE     , container.resolve(AppConst.SERIALIZER_SERVICE)        );
     facade.registerService( AppConst.FIGHTER_FACTORY        , container.resolve(AppConst.FIGHTER_FACTORY)           );
-    facade.registerService( AppConst.FIGHTER_TPL_FACTORY    , container.resolve(AppConst.FIGHTER_TPL_FACTORY)       );
+    facade.registerService( AppConst.SPAWNER_FACTORY        , container.resolve(AppConst.SPAWNER_FACTORY)           );
+    facade.registerService( AppConst.BATTLEFIELD_FACTORY    , container.resolve(AppConst.BATTLEFIELD_FACTORY)       );
     return facade;
 }
