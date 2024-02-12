@@ -6,6 +6,7 @@ import MoveFightersCommand from "./MoveFightersCommand";
 import FightCommand from "./FightCommand";
 import RemoveDeadFightersCommand from "./RemoveDeadFightersCommand";
 import RemoveWinnersCommand from "./RemoveWinnersCommand";
+import GameOverCommand from "./GameOverCommand";
 
 export{
     CreateBattleFieldCommand,
@@ -15,5 +16,6 @@ export{
     MoveFightersCommand, 
     RemoveDeadFightersCommand, 
     RemoveWinnersCommand,
-    FightCommand
+    FightCommand, 
+    GameOverCommand
 };

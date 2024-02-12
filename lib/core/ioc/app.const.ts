@@ -7,9 +7,10 @@ export default class AppConst{
 
     // commands
     static FIGHT:string                         = "Fight";
+    static GAME_OVER:string                     = "GameOver";
     static REMOVE_WINNERS:string                = "RemoveWinners";
     static MOVE_FIGHTERS:string                 = "MoveFighters";
-    static REMOVE_DEAD_FIGHTERS:string          = "RemoveDeadFightersCommand";
+    static REMOVE_DEAD_FIGHTERS:string          = "RemoveDeadFighters";
     static SET_FIGHTERS_PATH:string             = "SetFightersPath";
     static CREATE_BATTLEFIELD:string            = "CreateBattleField";
     static SPAWN_NEW_FIGHTERS:string            = "SpawnNewFighters";
