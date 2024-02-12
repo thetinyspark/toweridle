@@ -2,10 +2,8 @@ import { Container, Facade, StoreModel } from "@thetinyspark/coffe-maker";
 import AppConst from "./app.const";
 import SerializerService from "../service/SerializerService";
 import UIDService from "../service/UIDService";
-import FightersRepository from "../model/repository/FightersRepository";
 import FighterFactory from "../service/factory/FighterFactory";
 import SpawnerFactory from "../service/factory/SpawnerFactory";
-import SpawnersRepository from "../model/repository/SpawnersRepository";
 import BattleFieldRepository from "../model/repository/BattleFieldRepository";
 import BattleFieldFactory from "../service/factory/BattleFieldFactory";
 import PathService from "../service/PathService";
@@ -16,6 +14,7 @@ import {
     SetFightersPathCommand , 
     MoveFightersCommand,
     RemoveDeadFightersCommand,
+    RemoveWinnersCommand,
     FightCommand
 } from "../command";
 
@@ -25,6 +24,7 @@ export function configIOC(container:Container){
 
     //commands
     container.register(AppConst.FIGHT                           ,   ()=>  new FightCommand()                                                                        , false     );
+    container.register(AppConst.REMOVE_WINNERS                  ,   ()=>  new RemoveWinnersCommand()                                                                , false     );
     container.register(AppConst.REMOVE_DEAD_FIGHTERS            ,   ()=>  new RemoveDeadFightersCommand()                                                           , false     );
     container.register(AppConst.MOVE_FIGHTERS                   ,   ()=>  new MoveFightersCommand()                                                                 , false     );
     container.register(AppConst.SET_FIGHTERS_PATH               ,   ()=>  new SetFightersPathCommand()                                                              , false     );
@@ -36,9 +36,8 @@ export function configIOC(container:Container){
     container.register(AppConst.GAME_STORE_MODEL                ,   ()=>  new StoreModel()                                                                          , true      )
 
     // repositories
-    container.register(AppConst.FIGHTERS_REPOSITORY             ,   ()=>  new FightersRepository(container.resolve(AppConst.GAME_STORE_MODEL), "fighters")          , true      );
-    container.register(AppConst.SPAWNERS_REPOSITORY             ,   ()=>  new SpawnersRepository(container.resolve(AppConst.GAME_STORE_MODEL), "spawners")          , true      );
     container.register(AppConst.BATTLEFIELD_REPOSITORY          ,   ()=>  new BattleFieldRepository(container.resolve(AppConst.GAME_STORE_MODEL), "battlefields")   , true      );
+    container.register(AppConst.WINNERS_REPOSITORY              ,   ()=>  new BattleFieldRepository(container.resolve(AppConst.GAME_STORE_MODEL), "winners")        , true      );
 
     // services
     container.register( AppConst.FIGHTER_FACTORY                ,   ()=>  new FighterFactory(container.resolve(AppConst.UID_SERVICE))                               , true      );
@@ -77,11 +76,11 @@ export function configFacade(container:Container){
     facade.registerCommand( AppConst.CREATE_BATTLEFIELD     , container.get(AppConst.CREATE_BATTLEFIELD)            );
     facade.registerCommand( AppConst.SPAWN_NEW_FIGHTERS     , container.get(AppConst.SPAWN_NEW_FIGHTERS)            );
     facade.registerCommand( AppConst.SEARCH_FOR_ENNEMIES    , container.get(AppConst.SEARCH_FOR_ENNEMIES)           );
+    facade.registerCommand( AppConst.REMOVE_WINNERS         , container.get(AppConst.REMOVE_WINNERS)                );
 
     //repositories
-    facade.registerProxy( AppConst.FIGHTERS_REPOSITORY      , container.resolve(AppConst.FIGHTERS_REPOSITORY)       );
-    facade.registerProxy( AppConst.SPAWNERS_REPOSITORY      , container.resolve(AppConst.SPAWNERS_REPOSITORY)       );
     facade.registerProxy( AppConst.BATTLEFIELD_REPOSITORY   , container.resolve(AppConst.BATTLEFIELD_REPOSITORY)    );
+    facade.registerProxy( AppConst.WINNERS_REPOSITORY       , container.resolve(AppConst.WINNERS_REPOSITORY)        );
 
     // services
     facade.registerService( AppConst.PATH_SERVICE           , container.resolve(AppConst.PATH_SERVICE)              );

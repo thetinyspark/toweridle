@@ -6,6 +6,7 @@ import { version } from "../version";
 import IUIDService from "./service/IUIDService";
 import IRepository from "./model/repository/IRepository";
 import Fighter from "./model/schema/Fighter";
+import BattleField from "./model/schema/BattleField";
 /**
  * The Engine object represents the main gateway between you and the paradox engine's core.
  */
@@ -22,10 +23,10 @@ export default class Engine extends Emitter{
      */
     reset(){
         const uidService    = this._container.resolve(AppConst.UID_SERVICE) as IUIDService;
-        const fighters      = this._container.resolve(AppConst.FIGHTERS_REPOSITORY) as IRepository<Fighter>;
+        const battlefields  = this._container.resolve(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
 
         uidService.reset();
-        fighters.reset();
+        battlefields.reset();
     }
 
     /**

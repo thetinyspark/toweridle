@@ -21,6 +21,9 @@ export default class FightCommand implements ICommand{
         const bfRepo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
         const bf = bfRepo.getOneBy('id', data.id);
 
+        if( bf === null )
+            return false;
+
         const everyone = bf.attackers.concat(bf.defenders);
 
         everyone.forEach( 

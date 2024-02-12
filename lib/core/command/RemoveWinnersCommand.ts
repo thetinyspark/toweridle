@@ -1,11 +1,12 @@
-import { Facade, ICommand } from "@thetinyspark/coffe-maker";
+import { Facade, ICommand, StoreModel } from "@thetinyspark/coffe-maker";
 import { INotification } from "@thetinyspark/tiny-observer";
 import AppConst from "../ioc/app.const";
 import IRepository from "../model/repository/IRepository";
 import BattleField from "../model/schema/BattleField";
+import Fighter from "../model/schema/Fighter";
 
 /**
- * removes dead fighters from battlefield
+ * Remove all attackers that passes the door (aka winners)
  * 
  * example.ts
  * ```typescript
@@ -13,27 +14,25 @@ import BattleField from "../model/schema/BattleField";
  * 
  * ```
  */
-export default class RemoveDeadFightersCommand implements ICommand{
+export default class RemoveWinnersCommand implements ICommand{
     execute(notification: INotification): boolean {
         const facade:Facade = notification.getEmitter() as Facade;
-        const data:any = notification.getPayload() as any; 
+        const data:any = notification.getPayload() as any;       
         const bfRepo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
+        const winRepo = facade.getProxy(AppConst.WINNERS_REPOSITORY) as IRepository<Fighter>;
         const bf = bfRepo.getOneBy('id', data.id);
-        
         if( bf === null )
             return false;
 
+        if( bf.door.hp > 0 || bf.defenders.includes(bf.door) )
+            return true;
+
         bf.attackers.forEach( 
             (fighter)=>{
-                if( fighter.hp <= 0 )
+                if( fighter.row === bf.targetRow && fighter.col === bf.targetCol ){
                     bf.attackers.splice(bf.attackers.indexOf(fighter), 1);
-            }
-        );
-
-        bf.defenders.forEach( 
-            (fighter)=>{
-                if( fighter.hp <= 0 )
-                    bf.defenders.splice(bf.defenders.indexOf(fighter), 1);
+                    winRepo.add(fighter);
+                }
             }
         );
 

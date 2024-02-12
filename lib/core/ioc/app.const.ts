@@ -7,6 +7,7 @@ export default class AppConst{
 
     // commands
     static FIGHT:string                         = "Fight";
+    static REMOVE_WINNERS:string                = "RemoveWinners";
     static MOVE_FIGHTERS:string                 = "MoveFighters";
     static REMOVE_DEAD_FIGHTERS:string          = "RemoveDeadFightersCommand";
     static SET_FIGHTERS_PATH:string             = "SetFightersPath";
@@ -18,8 +19,7 @@ export default class AppConst{
     static DO_CYCLE:string                      = "DoCycle";
 
     // repositories
-    static FIGHTERS_REPOSITORY:string          = "FightersRepository";
-    static SPAWNERS_REPOSITORY:string          = "SpawnersRepository";
+    static WINNERS_REPOSITORY:string           = "WinnersRepository";
     static BATTLEFIELD_REPOSITORY:string       = "BattleFieldRepository";
 
     // factories
