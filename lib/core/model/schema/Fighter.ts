@@ -1,3 +1,5 @@
+import { GameNode } from "../../../common/model/node";
+
 export default class Fighter{
     constructor(
         public id:number, 
@@ -12,5 +14,7 @@ export default class Fighter{
         public hp:number,
         public row:number = 0, 
         public col:number = 0,
+        public enemy:Fighter = null,
+        public path:GameNode[] = []
     ){}
 }

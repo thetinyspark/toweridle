@@ -2,6 +2,7 @@ import { FighterDescType } from "../lib/core/model/types/FighterDescType";
 import { FighterPoolDescType } from "../lib/core/model/types/FighterPoolDescType";
 import { SpawnerDescType } from "../lib/core/model/types/SpawnerDescType";
 import { BattleFieldDescType } from "../lib/core/model/types/BattleFieldDescType";
+import Fighter from "../lib/core/model/schema/Fighter";
 
 export function DOOR_DESC_TYPE():FighterDescType{
     return {
@@ -78,11 +79,40 @@ export function SPAWNER2():SpawnerDescType{
         fighters: [
             ARCHERS_POOL()
         ], 
-        frequency: 1, 
+        frequency: 2, 
         name: "spawner2", 
         ownerID: 2
     }
 }
+
+export function EMPTY_SPAWNER():SpawnerDescType{
+    return {
+        id: 1, 
+        col: 11, 
+        row : 14, 
+        fighters: [
+            ARCHERS_POOL(0)
+        ], 
+        frequency: 1, 
+        name: "EmptySpawner", 
+        ownerID: 1
+    }
+}
+
+export function SPAWN_ONCE():SpawnerDescType{
+    return {
+        id: 1, 
+        col: 11, 
+        row : 14, 
+        fighters: [
+            ARCHERS_POOL(1)
+        ], 
+        frequency: 1, 
+        name: "EmptySpawner", 
+        ownerID: 1
+    }
+}
+
 
 export function PLAYGROUND():number[][]{
     return  [
@@ -104,6 +134,18 @@ export function PLAYGROUND():number[][]{
     ]
 }
 
+
+export function PLAYGROUND_METADATA():any{
+    return {
+        fighterRow: 1,
+        fighterCol: 1,
+        enemyRow: 13,
+        enemyCol: 22,
+        doorRow: 0,
+        doorCol: 11,
+    }
+}
+
 export function BATTLEFIELD1():BattleFieldDescType{
     return {
         id: 1,
@@ -115,6 +157,51 @@ export function BATTLEFIELD1():BattleFieldDescType{
         door: DOOR_DESC_TYPE(), 
         grid: PLAYGROUND(), 
         targetCol: 11,
+        targetRow: 0,
+    }
+}
+
+export function BATTLEFIELD2():BattleFieldDescType{
+    return {
+        id: 2,
+        name: "château hanté",
+        atkSpawners: [SPAWNER1(), SPAWNER1()],
+        dfdSpawners: [SPAWNER2(), SPAWNER2(), SPAWNER2()],
+        attackerID: 1, 
+        defenderID: 2, 
+        door: DOOR_DESC_TYPE(), 
+        grid: PLAYGROUND(), 
+        targetCol: 11,
         targetRow: 11,
     }
+}
+
+export function BATTLEFIELD3():BattleFieldDescType{
+    return {
+        id: 3,
+        name: "marais du vide",
+        atkSpawners: [SPAWN_ONCE()],
+        dfdSpawners: [EMPTY_SPAWNER()],
+        attackerID: 1, 
+        defenderID: 2, 
+        door: DOOR_DESC_TYPE(), 
+        grid: PLAYGROUND(), 
+        targetCol: 11,
+        targetRow: 11,
+    }
+}
+
+
+export function ENNEMIES(numRows:number = 10, numCols:number = 10):Fighter[]{
+    const ennemies:Fighter[] = []; 
+    let id = 0;
+    for( let i = 0; i < numRows; i++ ){
+      for( let j = 0; j < numCols; j++ ){
+        ennemies.push( 
+            new Fighter(++id, 1, "fighter_"+id, 1, 1, 1, 1, 1, 1, 1, i, j)
+        );
+      }
+    }
+
+    return ennemies;
 }

@@ -29,6 +29,7 @@ describe('FighterFactory test suite',
         expect(result.magDef).toEqual(tpl.magDef);
         expect(result.radius).toEqual(tpl.radius);
         expect(result.speed).toEqual(tpl.speed);
+        expect(result.enemy).toBeNull();
     }); 
 
     it('should provide a unique building id if it is not provided or it has a negative value', 

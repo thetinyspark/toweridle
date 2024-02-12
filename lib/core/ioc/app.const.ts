@@ -6,7 +6,10 @@ export default class AppConst{
     static GAME_STORE_MODEL:string              = "GameStoreModel"
 
     // commands
-    static START_APP:string                     = "StartApp";
+    static SET_FIGHTERS_PATH:string             = "SetFightersPath";
+    static CREATE_BATTLEFIELD:string            = "CreateBattleField";
+    static SPAWN_NEW_FIGHTERS:string            = "SpawnNewFighters";
+    static SEARCH_FOR_ENNEMIES:string           = "SearchForEnnemies";
 
     // queries
     static DO_CYCLE:string                      = "DoCycle";
@@ -22,6 +25,7 @@ export default class AppConst{
     static BATTLEFIELD_FACTORY:string          = "BattleFieldFactory";
     
     // services
+    static PATH_SERVICE:string                 = "PathService";
     static UID_SERVICE:string                  = "UIDService";
     static SERIALIZER_SERVICE:string           = "SerializerService";
 }
