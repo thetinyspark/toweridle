@@ -9,16 +9,20 @@ import SpawnersRepository from "../model/repository/SpawnersRepository";
 import BattleFieldRepository from "../model/repository/BattleFieldRepository";
 import BattleFieldFactory from "../service/factory/BattleFieldFactory";
 import PathService from "../service/PathService";
-import { CreateBattleFieldCommand, 
-        SpawnNewFightersCommand, 
-        SearchForEnnemiesCommand,
-        SetFightersPathCommand } from "../command";
+import { 
+    CreateBattleFieldCommand, 
+    SpawnNewFightersCommand, 
+    SearchForEnnemiesCommand,
+    SetFightersPathCommand , 
+    MoveFightersCommand
+} from "../command";
 
 export function configIOC(container:Container){
     container.reset();
     container.register(AppConst.APP_FACADE                      ,   ()=>  new Facade()                                                                              , true      );
 
     //commands
+    container.register(AppConst.MOVE_FIGHTERS                   ,   ()=>  new MoveFightersCommand()                                                                 , false     );
     container.register(AppConst.SET_FIGHTERS_PATH               ,   ()=>  new SetFightersPathCommand()                                                              , false     );
     container.register(AppConst.CREATE_BATTLEFIELD              ,   ()=>  new CreateBattleFieldCommand()                                                            , false     );
     container.register(AppConst.SPAWN_NEW_FIGHTERS              ,   ()=>  new SpawnNewFightersCommand()                                                             , false     );
@@ -62,6 +66,7 @@ export function configFacade(container:Container){
     const facade = container.resolve(AppConst.APP_FACADE);
 
     // commands
+    facade.registerCommand( AppConst.MOVE_FIGHTERS          , container.get(AppConst.MOVE_FIGHTERS)                 );
     facade.registerCommand( AppConst.SET_FIGHTERS_PATH      , container.get(AppConst.SET_FIGHTERS_PATH)             );
     facade.registerCommand( AppConst.CREATE_BATTLEFIELD     , container.get(AppConst.CREATE_BATTLEFIELD)            );
     facade.registerCommand( AppConst.SPAWN_NEW_FIGHTERS     , container.get(AppConst.SPAWN_NEW_FIGHTERS)            );

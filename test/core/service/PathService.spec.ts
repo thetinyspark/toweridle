@@ -6,8 +6,14 @@ import { BATTLEFIELD1 } from "../../mock.spec";
 import BattleField from "../../../lib/core/model/schema/BattleField";
 import Repository from "../../../lib/core/model/repository/Repository";
 import PathStrategyMode from "../../../lib/core/model/enum/PathStrategyMode";
+import Fighter from "../../../lib/core/model/schema/Fighter";
 
 describe("PathService test suite", () => {
+
+  function getCoords(fighter:Fighter){
+    return {row: fighter.row, col: fighter.col};
+  }
+
   it("should be able to get the service", () => {
     // given
     const facade = setup() as Facade;
@@ -44,6 +50,11 @@ describe("PathService test suite", () => {
     expect(pathToDoor[pathToDoor.length-1]).toBeTruthy();
     expect(pathToDoor[pathToDoor.length-1].state.row).toEqual(battlefield.door.row);
     expect(pathToDoor[pathToDoor.length-1].state.col).toEqual(battlefield.door.col);
+
+    // path does not contain the current fighter node
+
+    expect(pathToDoor[0].state.row === fighter.row && pathToDoor[0].state.col === fighter.col).toBeFalse();
+    expect(pathToEnemy[0].state.row === fighter.row && pathToEnemy[0].state.col === fighter.col).toBeFalse();
 
   });
 });
