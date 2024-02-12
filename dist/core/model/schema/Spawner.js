@@ -1,20 +1,20 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const moocaccino_barista_1 = require("@thetinyspark/moocaccino-barista");
-class Spawner extends moocaccino_barista_1.GameNode {
+class Spawner {
     id;
-    ownerID;
     name;
+    ownerID;
     row;
     col;
+    frequency;
     fighters;
-    constructor(id, ownerID, name, row, col, fighters) {
-        super();
+    constructor(id, name, ownerID, row, col, frequency, fighters) {
         this.id = id;
-        this.ownerID = ownerID;
         this.name = name;
+        this.ownerID = ownerID;
         this.row = row;
         this.col = col;
+        this.frequency = frequency;
         this.fighters = fighters;
     }
 }

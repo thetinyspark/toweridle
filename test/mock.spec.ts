@@ -113,6 +113,20 @@ export function SPAWN_ONCE():SpawnerDescType{
     }
 }
 
+export function SPAWNER(row:number, col:number, amount:number, frequency:number):SpawnerDescType{
+    return {
+        id: 1, 
+        col: col, 
+        row : row, 
+        fighters: [
+            ARCHERS_POOL(amount)
+        ], 
+        frequency: frequency, 
+        name: "EmptySpawner", 
+        ownerID: 1
+    }
+}
+
 
 export function PLAYGROUND():number[][]{
     return  [
@@ -133,7 +147,6 @@ export function PLAYGROUND():number[][]{
         [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1]
     ]
 }
-
 
 export function PLAYGROUND_METADATA():any{
     return {
@@ -188,6 +201,26 @@ export function BATTLEFIELD3():BattleFieldDescType{
         grid: PLAYGROUND(), 
         targetCol: 11,
         targetRow: 11,
+    }
+}
+
+export function BATTLEFIELD4():BattleFieldDescType{
+    return {
+        id: 1,
+        name: "minimap",
+        atkSpawners: [SPAWNER(0,0,1,1)],
+        dfdSpawners: [SPAWNER(1,1,1,1)],
+        attackerID: 1, 
+        defenderID: 2, 
+        door: DOOR_DESC_TYPE(), 
+        grid: [
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0],
+            [0,0,0,0]
+        ], 
+        targetCol: 3,
+        targetRow: 3,
     }
 }
 

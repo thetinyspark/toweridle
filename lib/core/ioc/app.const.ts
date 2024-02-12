@@ -6,6 +6,7 @@ export default class AppConst{
     static GAME_STORE_MODEL:string              = "GameStoreModel"
 
     // commands
+    static FIGHT:string                         = "Fight";
     static MOVE_FIGHTERS:string                 = "MoveFighters";
     static SET_FIGHTERS_PATH:string             = "SetFightersPath";
     static CREATE_BATTLEFIELD:string            = "CreateBattleField";

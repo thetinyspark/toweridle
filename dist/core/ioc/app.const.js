@@ -6,18 +6,24 @@ class AppConst {
     // model
     static GAME_STORE_MODEL = "GameStoreModel";
     // commands
-    static START_APP = "StartApp";
+    static FIGHT = "Fight";
+    static MOVE_FIGHTERS = "MoveFighters";
+    static SET_FIGHTERS_PATH = "SetFightersPath";
+    static CREATE_BATTLEFIELD = "CreateBattleField";
+    static SPAWN_NEW_FIGHTERS = "SpawnNewFighters";
+    static SEARCH_FOR_ENNEMIES = "SearchForEnnemies";
     // queries
     static DO_CYCLE = "DoCycle";
     // repositories
     static FIGHTERS_REPOSITORY = "FightersRepository";
-    ;
-    static FIGHTERS_TPL_REPOSITORY = "FightersTplRepository";
-    ;
+    static SPAWNERS_REPOSITORY = "SpawnersRepository";
+    static BATTLEFIELD_REPOSITORY = "BattleFieldRepository";
     // factories
     static FIGHTER_FACTORY = "FighterFactory";
-    static FIGHTER_TPL_FACTORY = "FighterTemplateFactory";
+    static SPAWNER_FACTORY = "SpawnerFactory";
+    static BATTLEFIELD_FACTORY = "BattleFieldFactory";
     // services
+    static PATH_SERVICE = "PathService";
     static UID_SERVICE = "UIDService";
     static SERIALIZER_SERVICE = "SerializerService";
 }

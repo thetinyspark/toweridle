@@ -1,9 +1,10 @@
-import Fighter from "../schema/Fighter";
-export declare type SpawnerTemplateDescType = {
+import { FighterPoolDescType } from "./FighterPoolDescType";
+export declare type SpawnerDescType = {
     id: number;
     ownerID: number;
     row: number;
     col: number;
     name: string;
-    fighters: Fighter[];
+    frequency: number;
+    fighters: FighterPoolDescType[];
 };
