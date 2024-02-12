@@ -21,6 +21,9 @@ export default class SearchForEnnemiesCommand implements ICommand{
         const bfRepo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
         const bf = bfRepo.getOneBy('id', data.id);
 
+        if( bf === null )
+            return false;
+
         bf.attackers.forEach( 
             (fighter)=>{
                 const inside = Utils.getEnnemiesInRadius(bf.defenders, fighter.row, fighter.col, fighter.radius);

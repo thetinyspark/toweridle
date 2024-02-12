@@ -10,8 +10,8 @@ import Fighter from "../../../lib/core/model/schema/Fighter";
 describe('MoveFightersCommand test suite', 
 ()=>{
 
-    const facade        = setup() as Facade;
-    const data          = BATTLEFIELD1();
+    var facade = setup() as Facade;
+    var data   = BATTLEFIELD1();
 
     function getInfos(fighter:Fighter){
         return {row: fighter.row, col: fighter.col, pathLength: fighter.path?.length || 0};
@@ -19,10 +19,13 @@ describe('MoveFightersCommand test suite',
 
     beforeEach( 
         async ()=>{
+            facade = setup() as Facade;
+            data   = BATTLEFIELD1();
             const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
             repository.reset();
             await facade.query(AppConst.CREATE_BATTLEFIELD, data);
             await facade.query(AppConst.SPAWN_NEW_FIGHTERS, {id: data.id, numCycle:2});
+            await facade.query(AppConst.SEARCH_FOR_ENNEMIES, {id: data.id});
             await facade.query(AppConst.SET_FIGHTERS_PATH, {id: data.id});
         }
     );
@@ -52,5 +55,30 @@ describe('MoveFightersCommand test suite',
         // door can't move
         expect(before2.pathLength).toEqual(getInfos(fighter2).pathLength);
         expect(before2).toEqual(getInfos(fighter2));
+    });
+
+    it('should not move a fighter it it has an enemy', 
+    async ()=>{
+        // given 
+        const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
+        const bf = repository.getOneBy('id', 1);
+        const fighter1 = bf.attackers[0];
+        const fighter2 = bf.defenders[1];
+
+        // force fighter1 to have en enemy
+        fighter1.enemy = fighter2;
+
+        // when 
+        const before1 = getInfos(fighter1);
+        const before2 = getInfos(fighter2);
+        const ok = await facade.query(AppConst.MOVE_FIGHTERS, {id: data.id});
+        
+        // then 
+        expect(ok).toBeTrue();
+        expect(before1).toEqual(getInfos(fighter1));
+        expect(getInfos(fighter1).pathLength).toEqual(before1.pathLength);
+        
+        expect(before2).not.toEqual(getInfos(fighter2));
+        expect(before2.pathLength).not.toEqual(getInfos(fighter2).pathLength);
     });
 })

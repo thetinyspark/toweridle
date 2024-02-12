@@ -25,7 +25,7 @@ export default class MoveFightersCommand implements ICommand{
 
         bf.attackers.forEach( 
             (fighter)=>{
-                if( fighter.path.length === 0 )
+                if( fighter.path.length === 0 || fighter.enemy !== null)
                     return;
 
                 const nextIndx = Math.min(fighter.path.length - 1, fighter.speed);
@@ -37,7 +37,7 @@ export default class MoveFightersCommand implements ICommand{
 
         bf.defenders.forEach( 
             (fighter)=>{
-                if( fighter.path.length === 0 )
+                if( fighter.path.length === 0 || fighter.enemy !== null)
                     return;
                 const nextIndx = Math.min(fighter.path.length - 1, fighter.speed);
                 fighter.row = fighter.path[nextIndx].state.row;

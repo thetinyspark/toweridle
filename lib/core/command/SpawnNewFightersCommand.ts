@@ -20,6 +20,9 @@ export default class SpawnNewFightersCommand implements ICommand{
         const bfRepo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
         const bf = bfRepo.getOneBy('id', data.id);
 
+        if( bf === null )
+            return false;
+
         bf.atkSpawners.forEach( 
             (spawner)=>{
                 const condition1 = data.numCycle % spawner.frequency !== 0;
