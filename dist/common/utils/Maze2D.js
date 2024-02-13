@@ -4,10 +4,11 @@ const grid_1 = require("../model/space/partitioning/grid");
 const node_1 = require("../model/node");
 const MazeNodeType_1 = require("./MazeNodeType");
 class Maze2D {
-    _grid = null;
-    _pathCoords;
-    _currentRow = 0;
-    _currentCol = 0;
+    constructor() {
+        this._grid = null;
+        this._currentRow = 0;
+        this._currentCol = 0;
+    }
     reset(rows, cols, startRow, startCol) {
         this._pathCoords = [];
         this._grid = new grid_1.Grid2D();

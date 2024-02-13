@@ -1,18 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class default_1 {
-    id;
-    name;
-    attackerID;
-    defenderID;
-    atkSpawners;
-    dfdSpawners;
-    door;
-    targetRow;
-    targetCol;
-    grid;
-    attackers;
-    defenders;
     constructor(id, name, attackerID, defenderID, atkSpawners, dfdSpawners, door, targetRow, targetCol, grid, attackers = [], defenders = []) {
         this.id = id;
         this.name = name;

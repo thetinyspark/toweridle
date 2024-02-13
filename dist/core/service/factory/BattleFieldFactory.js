@@ -4,9 +4,6 @@ const grid_1 = require("../../../common/model/space/partitioning/grid");
 const utils_1 = require("../../../common/utils");
 const BattleField_1 = require("../../model/schema/BattleField");
 class BattleFieldFactory {
-    _uidService;
-    _spawnerFactory;
-    _fighterFactory;
     constructor(_uidService, _spawnerFactory, _fighterFactory) {
         this._uidService = _uidService;
         this._spawnerFactory = _spawnerFactory;

@@ -8,8 +8,6 @@ const version_1 = require("../version");
  * The Engine object represents the main gateway between you and the TowerIdle engine's core.
  */
 class Engine extends tiny_observer_1.Emitter {
-    _facade;
-    _container;
     constructor() {
         super();
     }

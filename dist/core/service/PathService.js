@@ -4,7 +4,6 @@ const utils_1 = require("../../common/utils");
 const PathStrategyMode_1 = require("../model/enum/PathStrategyMode");
 const Utils_1 = require("../utils/Utils");
 class PathService {
-    _pathfinder;
     constructor() {
         this._pathfinder = new utils_1.PathFinder2D();
     }

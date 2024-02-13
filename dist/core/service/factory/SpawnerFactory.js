@@ -2,8 +2,6 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const Spawner_1 = require("../../model/schema/Spawner");
 class SpawnerFactory {
-    _uidService;
-    _fighterFactory;
     constructor(_uidService, _fighterFactory) {
         this._uidService = _uidService;
         this._fighterFactory = _fighterFactory;

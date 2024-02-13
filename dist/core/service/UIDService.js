@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class UIDService {
-    ids = new Map();
+    constructor() {
+        this.ids = new Map();
+    }
     reset() {
         this.ids = new Map();
     }

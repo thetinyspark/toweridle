@@ -1,20 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Fighter {
-    id;
-    tplID;
-    name;
-    speed;
-    radius;
-    phyAtk;
-    phyDef;
-    magAtk;
-    magDef;
-    hp;
-    row;
-    col;
-    enemy;
-    path;
     constructor(id, tplID, name, speed, radius, phyAtk, phyDef, magAtk, magDef, hp, row = 0, col = 0, enemy = null, path = []) {
         this.id = id;
         this.tplID = tplID;

@@ -1,13 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class Spawner {
-    id;
-    name;
-    ownerID;
-    row;
-    col;
-    frequency;
-    fighters;
     constructor(id, name, ownerID, row, col, frequency, fighters) {
         this.id = id;
         this.name = name;
