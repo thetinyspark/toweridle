@@ -55,5 +55,5 @@ export default class Engine extends Emitter {
      * TowerIdle.engine.doCycle(1,1)
      * ```
      */
-    doCycle(battlefieldID: number, numCycle: number): Promise<GameOverInfoType>;
+    doCycle(battlefieldID: number, numCycle: number, untilGameOver?: boolean): Promise<GameOverInfoType>;
 }

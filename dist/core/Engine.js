@@ -83,8 +83,8 @@ class Engine extends tiny_observer_1.Emitter {
      * TowerIdle.engine.doCycle(1,1)
      * ```
      */
-    doCycle(battlefieldID, numCycle) {
-        return this.getFacade().query(app_const_1.default.DO_CYCLE, { id: battlefieldID, numCycle });
+    doCycle(battlefieldID, numCycle, untilGameOver = false) {
+        return this.getFacade().query(app_const_1.default.DO_CYCLE, { id: battlefieldID, numCycle, complete: untilGameOver });
     }
 }
 exports.default = Engine;

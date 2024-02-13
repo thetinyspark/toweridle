@@ -70,6 +70,20 @@ describe("Engine test suite", () => {
         }   
     );
 
+    it("should be able to process a cycle until game over", 
+        async () => {
+            // given
+            engine.reset();
+            const bf = await engine.createBattleField(BATTLEFIELD1());
+
+            // when
+            const ok = await engine.doCycle(bf.id, 1, true);
+            expect(bf).toBeTruthy();
+            expect(ok).toBeTruthy();
+            expect(ok.gameover).toBeTrue();
+        }   
+    );
+
     
     // version
     it("should be able return version and facade", 

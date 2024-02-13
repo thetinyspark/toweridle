@@ -97,8 +97,8 @@ export default class Engine extends Emitter{
      * TowerIdle.engine.doCycle(1,1)
      * ```
      */
-    doCycle(battlefieldID:number, numCycle:number):Promise<GameOverInfoType>{
-        return this.getFacade().query(AppConst.DO_CYCLE, {id:battlefieldID, numCycle});
+    doCycle(battlefieldID:number, numCycle:number, untilGameOver:boolean = false):Promise<GameOverInfoType>{
+        return this.getFacade().query(AppConst.DO_CYCLE, {id:battlefieldID, numCycle, complete:untilGameOver});
     }
 
 }
