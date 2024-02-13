@@ -16,6 +16,7 @@ import path = require("path");
  * ```
  */
 export default class DoCycleCommand implements ICommand{
+
     async execute(notification: INotification): Promise<GameOverInfoType|boolean> {
         const facade:Facade = notification.getEmitter() as Facade;
         const data:any = notification.getPayload() as any;       

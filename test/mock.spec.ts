@@ -56,13 +56,13 @@ export function ARCHERS_POOL(amount:number = 10):FighterPoolDescType{
     }
 }
 
-export function SPAWNER1():SpawnerDescType{
+export function SPAWNER1(amount:number = 10):SpawnerDescType{
     return {
         id: 1, 
         col: 11, 
         row : 14, 
         fighters: [
-            ARCHERS_POOL()
+            ARCHERS_POOL(amount)
         ], 
         frequency: 1, 
         name: "spawner1", 
@@ -71,13 +71,13 @@ export function SPAWNER1():SpawnerDescType{
 
 }
 
-export function SPAWNER2():SpawnerDescType{
+export function SPAWNER2(amount:number = 10):SpawnerDescType{
     return {
         id: 2, 
         col: 11, 
         row : 1, 
         fighters: [
-            ARCHERS_POOL()
+            ARCHERS_POOL(amount)
         ], 
         frequency: 2, 
         name: "spawner2", 
@@ -145,6 +145,30 @@ export function PLAYGROUND():number[][]{
         [1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,0,1],
         [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1],
         [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1]
+    ]
+}
+
+export function BIG_PLAYGROUND():number[][]{
+    return  [
+        [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1],
+        [1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,0,1,1,1,0,1,1,1,1,1,1],
+        [1,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,0,1,0,1,0,1,1,0,1,0,1,1,0,1,0,1,1,1,1,1,1],
+        [1,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,0,0,0,1,0,1,1,1,1,1,1],
+        [1,0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,0,1,0,1,1,1,1,1,1],
+        [1,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,1,0,0,0,1,1,1,1,1,1],
+        [1,1,1,1,1,0,0,1,1,1,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,1,0,0,0,1,0,0,0,1,0,1,0,0,0,0,0,1,1,1,1,1,1],
+        [1,0,1,1,1,1,1,0,1,0,1,0,0,0,0,0,1,1,1,0,1,0,1,1,1,1,1,1],
+        [1,0,0,0,1,0,0,0,1,0,1,0,0,0,1,0,0,0,0,0,1,0,1,1,1,1,1,1],
+        [1,1,1,0,1,0,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,1,1],
+        [1,0,0,0,0,0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1],
+        [1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,0,0,0,1,0,1,1,0,1,1,1,1],
+        [1,1,1,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+        [1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
     ]
 }
 
@@ -224,6 +248,20 @@ export function BATTLEFIELD4():BattleFieldDescType{
     }
 }
 
+export function BATTLEFIELD5():BattleFieldDescType{
+    return {
+        id: 1,
+        name: "plaines ensanglantées",
+        atkSpawners: [SPAWNER1(1000), SPAWNER1(1000), SPAWNER1(1000)],
+        dfdSpawners: [SPAWNER2(1000), SPAWNER2(1000), SPAWNER2(1000)],
+        attackerID: 1, 
+        defenderID: 2, 
+        door: DOOR_DESC_TYPE(), 
+        grid: BIG_PLAYGROUND(), 
+        targetCol: 11,
+        targetRow: 0,
+    }
+}
 
 export function ENNEMIES(numRows:number = 10, numCols:number = 10):Fighter[]{
     const ennemies:Fighter[] = []; 
