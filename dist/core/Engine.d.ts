@@ -1,7 +1,10 @@
 import { Container, Facade } from "@thetinyspark/coffe-maker";
 import { Emitter } from "@thetinyspark/tiny-observer";
+import BattleField from "./model/schema/BattleField";
+import { BattleFieldDescType } from "./model/types/BattleFieldDescType";
+import { GameOverInfoType } from "./model/types/GameOverInfoType";
 /**
- * The Engine object represents the main gateway between you and the paradox engine's core.
+ * The Engine object represents the main gateway between you and the TowerIdle engine's core.
  */
 export default class Engine extends Emitter {
     private _facade;
@@ -28,13 +31,29 @@ export default class Engine extends Emitter {
      */
     getFacade(): Facade;
     /**
-     * Processes a cycle. A cycle means that productions are added
-     * to cities's wallets and consumptions are removed from them too.
+     * Creates a battlefield with proper configuration
+     * @param data BattleFieldDescType
+     * @returns Promise<boolean>
+     */
+    createBattleField(data: BattleFieldDescType): Promise<BattleField>;
+    /**
+     * returns all battlefields
+     * @returns BattleField[]
+     */
+    getBattleFields(): BattleField[];
+    /**
+     * returns all battlefields
+     * @returns BattleField[]
+     */
+    getBattleFieldByID(id: number): BattleField;
+    /**
+     * Processes a cycle.
+     *
      *
      * example.ts
      * ```typescript
-     * Paradox.engine.doCycle()
+     * TowerIdle.engine.doCycle(1,1)
      * ```
      */
-    doCycle(): void;
+    doCycle(battlefieldID: number, numCycle: number): Promise<GameOverInfoType>;
 }

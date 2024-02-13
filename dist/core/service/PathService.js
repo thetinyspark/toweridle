@@ -11,10 +11,15 @@ class PathService {
     findPath(fighter, battlefield, strategy) {
         const start = battlefield.grid.getAt(fighter.row, fighter.col);
         const door = battlefield.grid.getAt(battlefield.door.row, battlefield.door.col);
-        const enemies = battlefield.attackers.includes(fighter) ? battlefield.defenders : battlefield.attackers;
-        const closest = Utils_1.default.getClosestEnemyIn(enemies, fighter.row, fighter.col);
-        const enemy = battlefield.grid.getAt(closest.row, closest.col);
-        const end = strategy === PathStrategyMode_1.default.TO_THE_DOOR ? door : enemy;
+        let end = door;
+        if (strategy === PathStrategyMode_1.default.TO_THE_CLOSEST_ENEMY) {
+            const enemies = battlefield.attackers.includes(fighter) ? battlefield.defenders : battlefield.attackers;
+            const closest = Utils_1.default.getClosestEnemyIn(enemies, fighter.row, fighter.col);
+            if (closest == null)
+                return [];
+            const enemy = battlefield.grid.getAt(closest.row, closest.col);
+            end = enemy;
+        }
         this._pathfinder.resetGraphe(battlefield.grid);
         const path = this._pathfinder.findPath(battlefield.grid, start, end, false);
         if (path.length == 0)

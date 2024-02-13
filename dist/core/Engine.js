@@ -5,7 +5,7 @@ const app_const_1 = require("./ioc/app.const");
 const config_1 = require("./ioc/config");
 const version_1 = require("../version");
 /**
- * The Engine object represents the main gateway between you and the paradox engine's core.
+ * The Engine object represents the main gateway between you and the TowerIdle engine's core.
  */
 class Engine extends tiny_observer_1.Emitter {
     _facade;
@@ -18,9 +18,9 @@ class Engine extends tiny_observer_1.Emitter {
      */
     reset() {
         const uidService = this._container.resolve(app_const_1.default.UID_SERVICE);
-        const fighters = this._container.resolve(app_const_1.default.FIGHTERS_REPOSITORY);
+        const battlefields = this._container.resolve(app_const_1.default.BATTLEFIELD_REPOSITORY);
         uidService.reset();
-        fighters.reset();
+        battlefields.reset();
     }
     /**
      * Init the engine, and restores game data
@@ -51,16 +51,40 @@ class Engine extends tiny_observer_1.Emitter {
         return this._facade;
     }
     /**
-     * Processes a cycle. A cycle means that productions are added
-     * to cities's wallets and consumptions are removed from them too.
+     * Creates a battlefield with proper configuration
+     * @param data BattleFieldDescType
+     * @returns Promise<boolean>
+     */
+    createBattleField(data) {
+        return this.getFacade().query(app_const_1.default.CREATE_BATTLEFIELD, data);
+    }
+    /**
+     * returns all battlefields
+     * @returns BattleField[]
+     */
+    getBattleFields() {
+        const repo = this.getFacade().getProxy(app_const_1.default.BATTLEFIELD_REPOSITORY);
+        return repo.getAll();
+    }
+    /**
+     * returns all battlefields
+     * @returns BattleField[]
+     */
+    getBattleFieldByID(id) {
+        const repo = this.getFacade().getProxy(app_const_1.default.BATTLEFIELD_REPOSITORY);
+        return repo.getOneBy('id', id);
+    }
+    /**
+     * Processes a cycle.
+     *
      *
      * example.ts
      * ```typescript
-     * Paradox.engine.doCycle()
+     * TowerIdle.engine.doCycle(1,1)
      * ```
      */
-    doCycle() {
-        this.getFacade().sendNotification(app_const_1.default.DO_CYCLE);
+    doCycle(battlefieldID, numCycle) {
+        return this.getFacade().query(app_const_1.default.DO_CYCLE, { id: battlefieldID, numCycle });
     }
 }
 exports.default = Engine;

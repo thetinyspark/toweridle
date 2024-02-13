@@ -19,7 +19,7 @@ class MoveFightersCommand {
         if (bf === null)
             return false;
         bf.attackers.forEach((fighter) => {
-            if (fighter.path.length === 0)
+            if (fighter.path.length === 0 || fighter.enemy !== null)
                 return;
             const nextIndx = Math.min(fighter.path.length - 1, fighter.speed);
             fighter.row = fighter.path[nextIndx].state.row;
@@ -27,7 +27,7 @@ class MoveFightersCommand {
             fighter.path.splice(0, nextIndx);
         });
         bf.defenders.forEach((fighter) => {
-            if (fighter.path.length === 0)
+            if (fighter.path.length === 0 || fighter.enemy !== null)
                 return;
             const nextIndx = Math.min(fighter.path.length - 1, fighter.speed);
             fighter.row = fighter.path[nextIndx].state.row;

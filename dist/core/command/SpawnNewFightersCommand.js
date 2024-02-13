@@ -16,6 +16,8 @@ class SpawnNewFightersCommand {
         const data = notification.getPayload();
         const bfRepo = facade.getProxy(app_const_1.default.BATTLEFIELD_REPOSITORY);
         const bf = bfRepo.getOneBy('id', data.id);
+        if (bf === null)
+            return false;
         bf.atkSpawners.forEach((spawner) => {
             const condition1 = data.numCycle % spawner.frequency !== 0;
             const condition2 = spawner.fighters.length === 0;

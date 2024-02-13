@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_const_1 = require("../ioc/app.const");
 /**
- * Proceed a fight attackers & defenders
+ * Remove all attackers that passes the door (aka winners)
  *
  * example.ts
  * ```typescript
@@ -10,24 +10,24 @@ const app_const_1 = require("../ioc/app.const");
  *
  * ```
  */
-class FightCommand {
+class RemoveWinnersCommand {
     execute(notification) {
         const facade = notification.getEmitter();
         const data = notification.getPayload();
         const bfRepo = facade.getProxy(app_const_1.default.BATTLEFIELD_REPOSITORY);
+        const winRepo = facade.getProxy(app_const_1.default.WINNERS_REPOSITORY);
         const bf = bfRepo.getOneBy('id', data.id);
         if (bf === null)
             return false;
-        const everyone = bf.attackers.concat(bf.defenders);
-        everyone.forEach((fighter) => {
-            if (!fighter.enemy)
-                return;
-            const phy = Math.max(0, fighter.phyAtk - fighter.enemy.phyDef);
-            const mag = Math.max(0, fighter.magAtk - fighter.enemy.magDef);
-            const total = mag + phy;
-            fighter.enemy.hp = Math.max(0, fighter.enemy.hp - total);
+        if (bf.door.hp > 0 || bf.defenders.includes(bf.door))
+            return true;
+        bf.attackers.forEach((fighter) => {
+            if (fighter.row === bf.targetRow && fighter.col === bf.targetCol) {
+                bf.attackers.splice(bf.attackers.indexOf(fighter), 1);
+                winRepo.add(fighter);
+            }
         });
         return true;
     }
 }
-exports.default = FightCommand;
+exports.default = RemoveWinnersCommand;

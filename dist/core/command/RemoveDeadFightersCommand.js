@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const app_const_1 = require("../ioc/app.const");
 /**
- * Proceed a fight attackers & defenders
+ * removes dead fighters from battlefield
  *
  * example.ts
  * ```typescript
@@ -10,7 +10,7 @@ const app_const_1 = require("../ioc/app.const");
  *
  * ```
  */
-class FightCommand {
+class RemoveDeadFightersCommand {
     execute(notification) {
         const facade = notification.getEmitter();
         const data = notification.getPayload();
@@ -18,16 +18,15 @@ class FightCommand {
         const bf = bfRepo.getOneBy('id', data.id);
         if (bf === null)
             return false;
-        const everyone = bf.attackers.concat(bf.defenders);
-        everyone.forEach((fighter) => {
-            if (!fighter.enemy)
-                return;
-            const phy = Math.max(0, fighter.phyAtk - fighter.enemy.phyDef);
-            const mag = Math.max(0, fighter.magAtk - fighter.enemy.magDef);
-            const total = mag + phy;
-            fighter.enemy.hp = Math.max(0, fighter.enemy.hp - total);
+        bf.attackers.forEach((fighter) => {
+            if (fighter.hp <= 0)
+                bf.attackers.splice(bf.attackers.indexOf(fighter), 1);
+        });
+        bf.defenders.forEach((fighter) => {
+            if (fighter.hp <= 0)
+                bf.defenders.splice(bf.defenders.indexOf(fighter), 1);
         });
         return true;
     }
 }
-exports.default = FightCommand;
+exports.default = RemoveDeadFightersCommand;

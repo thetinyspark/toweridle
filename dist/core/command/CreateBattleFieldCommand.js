@@ -18,7 +18,7 @@ class CreateBattleFieldCommand {
         const bfRepo = facade.getProxy(app_const_1.default.BATTLEFIELD_REPOSITORY);
         const bf = factory.fromData(data);
         bfRepo.add(bf);
-        return true;
+        return bf;
     }
 }
 exports.default = CreateBattleFieldCommand;

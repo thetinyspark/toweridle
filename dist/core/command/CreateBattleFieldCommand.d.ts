@@ -1,5 +1,6 @@
 import { ICommand } from "@thetinyspark/coffe-maker";
 import { INotification } from "@thetinyspark/tiny-observer";
+import BattleField from "../model/schema/BattleField";
 /**
  * Load battlefied configuration and creates a battlefield
  *
@@ -10,5 +11,5 @@ import { INotification } from "@thetinyspark/tiny-observer";
  * ```
  */
 export default class CreateBattleFieldCommand implements ICommand {
-    execute(notification: INotification): boolean;
+    execute(notification: INotification): BattleField;
 }
