@@ -1,6 +1,5 @@
 import { Container, Facade, StoreModel } from "@thetinyspark/coffe-maker";
 import AppConst from "./app.const";
-import SerializerService from "../service/SerializerService";
 import UIDService from "../service/UIDService";
 import FighterFactory from "../service/factory/FighterFactory";
 import SpawnerFactory from "../service/factory/SpawnerFactory";
@@ -45,7 +44,6 @@ export function configIOC(container:Container){
 
     // services
     container.register( AppConst.FIGHTER_FACTORY                ,   ()=>  new FighterFactory(container.resolve(AppConst.UID_SERVICE))                               , true      );
-    container.register( AppConst.SERIALIZER_SERVICE             ,   ()=>  new SerializerService()                                                                   , true      );
     container.register( AppConst.UID_SERVICE                    ,   ()=>  new UIDService()                                                                          , true      );
     container.register( AppConst.PATH_SERVICE                   ,   ()=>  new PathService()                                                                         , true      );
 

@@ -1,8 +1,12 @@
-// import Main from "./proto/Main";
+import { Container } from "@thetinyspark/coffe-maker";
+import Engine from "./core/Engine";
+import AppConst from "./core/ioc/app.const";
 
-// window.onload = function(){
-//     const main = new Main();
-//     main.start();
-// };
+const engine = new Engine();
+const defaultContainer = new Container();
+engine.init(defaultContainer);
 
-
+export = {
+    enginetowerIdleEngine: engine, 
+    consts: AppConst
+};

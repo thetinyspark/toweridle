@@ -24,7 +24,7 @@ describe('SetFightersPathCommand test suite',
         const nopathDef = bf.defenders.filter(f=>f.path.length == 0);
         
         // // then 
-        expect(ok1).toBeTrue();
+        expect(ok1).toBeTruthy();
         expect(ok2).toBeTrue();
         expect(ok3).toBeTrue();
         expect(nopathAtk.length).toEqual(0);
@@ -53,7 +53,7 @@ describe('SetFightersPathCommand test suite',
         const nopathAtk = bf.attackers.filter(f=>f.path.length == 0);
         
         // // then 
-        expect(ok1).toBeTrue();
+        expect(ok1).toBeTruthy();
         expect(ok2).toBeTrue();
         expect(ok3).toBeTrue();
         expect(nopathAtk.length).toEqual(0);
@@ -74,7 +74,7 @@ describe('SetFightersPathCommand test suite',
         const nopathDef = bf.defenders.filter(f=>f.path.length == 0);
         
         // // then 
-        expect(ok1).toBeTrue();
+        expect(ok1).toBeTruthy();
         expect(ok2).toBeTrue();
         expect(ok3).toBeFalse();
         expect(nopathAtk.length).not.toEqual(0);

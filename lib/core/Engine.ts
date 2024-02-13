@@ -5,10 +5,12 @@ import { configFacade, configIOC } from "./ioc/config";
 import { version } from "../version";
 import IUIDService from "./service/IUIDService";
 import IRepository from "./model/repository/IRepository";
-import Fighter from "./model/schema/Fighter";
 import BattleField from "./model/schema/BattleField";
+import { BattleFieldDescType } from "./model/types/BattleFieldDescType";
+import { GameOverInfoType } from "./model/types/GameOverInfoType";
+import Repository from "./model/repository/Repository";
 /**
- * The Engine object represents the main gateway between you and the paradox engine's core.
+ * The Engine object represents the main gateway between you and the TowerIdle engine's core.
  */
 export default class Engine extends Emitter{
     private _facade:Facade; 
@@ -59,18 +61,44 @@ export default class Engine extends Emitter{
         return this._facade;
     }
 
+    /**
+     * Creates a battlefield with proper configuration
+     * @param data BattleFieldDescType
+     * @returns Promise<boolean>
+     */
+    createBattleField(data:BattleFieldDescType):Promise<BattleField>{
+        return this.getFacade().query(AppConst.CREATE_BATTLEFIELD, data);
+    }
 
     /**
-     * Processes a cycle. A cycle means that productions are added 
-     * to cities's wallets and consumptions are removed from them too. 
+     * returns all battlefields
+     * @returns BattleField[]
+     */
+    getBattleFields():BattleField[]{
+        const repo = this.getFacade().getProxy(AppConst.BATTLEFIELD_REPOSITORY) as Repository<BattleField>;
+        return repo.getAll();
+    }
+
+    /**
+     * returns all battlefields
+     * @returns BattleField[]
+     */
+    getBattleFieldByID(id:number):BattleField{
+        const repo = this.getFacade().getProxy(AppConst.BATTLEFIELD_REPOSITORY) as Repository<BattleField>;
+        return repo.getOneBy('id',id);
+    }
+
+    /**
+     * Processes a cycle.
+     * 
      * 
      * example.ts
      * ```typescript
-     * Paradox.engine.doCycle()
+     * TowerIdle.engine.doCycle(1,1)
      * ```
      */
-    doCycle(){
-        this.getFacade().sendNotification(AppConst.DO_CYCLE);
+    doCycle(battlefieldID:number, numCycle:number):Promise<GameOverInfoType>{
+        return this.getFacade().query(AppConst.DO_CYCLE, {id:battlefieldID, numCycle});
     }
 
 }

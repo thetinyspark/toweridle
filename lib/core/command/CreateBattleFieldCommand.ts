@@ -15,7 +15,7 @@ import BattleField from "../model/schema/BattleField";
  * ```
  */
 export default class CreateBattleFieldCommand implements ICommand{
-    execute(notification: INotification): boolean {
+    execute(notification: INotification): BattleField {
         const facade:Facade = notification.getEmitter() as Facade;
         const data:any = notification.getPayload() as any; 
         
@@ -24,6 +24,6 @@ export default class CreateBattleFieldCommand implements ICommand{
         const bf = factory.fromData(data);
         bfRepo.add(bf);
 
-        return true;
+        return bf;
     }
 }

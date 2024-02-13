@@ -14,11 +14,10 @@ describe('DoCycleCommand test suite',
         const facade        = setup() as Facade;
         const data          = BATTLEFIELD5();
         // when 
-        const ok1 = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+        await facade.query(AppConst.CREATE_BATTLEFIELD, data);
         const info1:GameOverInfoType = await facade.query(AppConst.DO_CYCLE, {id:data.id, numCycle: 1});
         
         // // then 
-        expect(ok1).toBeTrue();
         expect(info1).toBeTruthy();
         expect(info1.gameover).toBeFalse();
     });
@@ -29,11 +28,10 @@ describe('DoCycleCommand test suite',
         const facade        = setup() as Facade;
         const data          = BATTLEFIELD1();
         // when 
-        const ok1 = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+        await facade.query(AppConst.CREATE_BATTLEFIELD, data);
         const info1:GameOverInfoType = await facade.query(AppConst.DO_CYCLE, {id:data.id, numCycle: 1, complete:true});
         
         // // then 
-        expect(ok1).toBeTrue();
         expect(info1).toBeTruthy();
         expect(info1.gameover).toBeTrue();
     });

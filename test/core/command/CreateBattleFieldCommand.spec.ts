@@ -19,7 +19,7 @@ describe('CreateBattleFieldCommand test suite',
         const ok = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
         
         // // then 
-        expect(ok).toBeTrue();
+        expect(ok).toBeTruthy();
         expect(repository.getAll().length).toEqual(1);
     });
 
@@ -30,11 +30,12 @@ describe('CreateBattleFieldCommand test suite',
         const data          = BATTLEFIELD1();
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
         // when 
-        const ok = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+        const bf = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
         const battlefield = repository.getOneBy('id', data.id); 
         
         // // then 
-        expect(ok).toBeTrue();
+        expect(bf).toBeTruthy();
+        expect(bf).toBe(battlefield);
         expect(battlefield).not.toBeNull();
         expect(battlefield.id).toEqual(data.id);
         expect(battlefield.atkSpawners.length).toEqual(data.atkSpawners.length);
