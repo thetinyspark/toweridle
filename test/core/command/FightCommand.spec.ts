@@ -52,7 +52,7 @@ describe('FightCommand test suite',
         expect(bf).toBeTruthy();
         expect(attacker.enemy).toBe(defender);
         expect(defender.enemy).toBe(attacker);
-        expect(attacker.hp).toEqual(expectHP1)
-        expect(defender.hp).toEqual(expectHP2)
+        expect(attacker.hp).toEqual(expectHP1);
+        expect(defender.hp).toEqual(expectHP2);
     });
 })

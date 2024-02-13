@@ -17,6 +17,7 @@ export default class PathService implements IPathService{
         const start = battlefield.grid.getAt(fighter.row, fighter.col);
         const door = battlefield.grid.getAt(battlefield.door.row, battlefield.door.col);
         let end:GameNode = door;
+        
 
         if( strategy === PathStrategyMode.TO_THE_CLOSEST_ENEMY ){
             const enemies = battlefield.attackers.includes(fighter) ? battlefield.defenders : battlefield.attackers;
@@ -27,6 +28,7 @@ export default class PathService implements IPathService{
             const enemy = battlefield.grid.getAt(closest.row, closest.col);
             end = enemy;
         }
+
 
         this._pathfinder.resetGraphe(battlefield.grid);
         const path = this._pathfinder.findPath(battlefield.grid, start, end, false );

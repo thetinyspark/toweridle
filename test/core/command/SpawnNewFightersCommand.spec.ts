@@ -1,7 +1,7 @@
 import { Facade } from "@thetinyspark/coffe-maker";
 import { setup } from "../../setup.spec";
 import AppConst from "../../../lib/core/ioc/app.const";
-import { BATTLEFIELD1, BATTLEFIELD2, BATTLEFIELD3 } from "../../mock.spec";
+import { BATTLEFIELD1, BATTLEFIELD2, BATTLEFIELD3, BATTLEFIELD5 } from "../../mock.spec";
 import BattleField from "../../../lib/core/model/schema/BattleField";
 import IRepository from "../../../lib/core/model/repository/IRepository";
 
@@ -13,6 +13,7 @@ describe('SpawnNewFightersCommand test suite',
     const data1 = BATTLEFIELD1();
     const data2 = BATTLEFIELD2();
     const data3 = BATTLEFIELD3();
+    const data5 = BATTLEFIELD5();
 
     beforeEach( 
         async ()=>{
@@ -21,6 +22,7 @@ describe('SpawnNewFightersCommand test suite',
             await facade.query(AppConst.CREATE_BATTLEFIELD, data1);
             await facade.query(AppConst.CREATE_BATTLEFIELD, data2);
             await facade.query(AppConst.CREATE_BATTLEFIELD, data3);
+            await facade.query(AppConst.CREATE_BATTLEFIELD, data5);
         }
     )
 
