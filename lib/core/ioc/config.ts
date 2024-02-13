@@ -16,7 +16,8 @@ import {
     GameOverCommand,
     RemoveDeadFightersCommand,
     RemoveWinnersCommand,
-    FightCommand
+    FightCommand,
+    DoCycleCommand
 } from "../command";
 
 export function configIOC(container:Container){
@@ -24,6 +25,7 @@ export function configIOC(container:Container){
     container.register(AppConst.APP_FACADE                      ,   ()=>  new Facade()                                                                              , true      );
 
     //commands
+    container.register(AppConst.DO_CYCLE                        ,   ()=>  new DoCycleCommand()                                                                      , false     );
     container.register(AppConst.GAME_OVER                       ,   ()=>  new GameOverCommand()                                                                     , false     );
     container.register(AppConst.FIGHT                           ,   ()=>  new FightCommand()                                                                        , false     );
     container.register(AppConst.REMOVE_WINNERS                  ,   ()=>  new RemoveWinnersCommand()                                                                , false     );
@@ -71,6 +73,7 @@ export function configFacade(container:Container){
     const facade = container.resolve(AppConst.APP_FACADE);
 
     // commands
+    facade.registerCommand( AppConst.DO_CYCLE               , container.get(AppConst.DO_CYCLE)                      );
     facade.registerCommand( AppConst.GAME_OVER              , container.get(AppConst.GAME_OVER)                     );
     facade.registerCommand( AppConst.FIGHT                  , container.get(AppConst.FIGHT)                         );
     facade.registerCommand( AppConst.REMOVE_DEAD_FIGHTERS   , container.get(AppConst.REMOVE_DEAD_FIGHTERS)          );

@@ -16,10 +16,18 @@ export default class PathService implements IPathService{
     findPath(fighter: Fighter, battlefield: BattleField, strategy: PathStrategyMode): GameNode[] {
         const start = battlefield.grid.getAt(fighter.row, fighter.col);
         const door = battlefield.grid.getAt(battlefield.door.row, battlefield.door.col);
-        const enemies = battlefield.attackers.includes(fighter) ? battlefield.defenders : battlefield.attackers;
-        const closest = Utils.getClosestEnemyIn(enemies, fighter.row, fighter.col);
-        const enemy = battlefield.grid.getAt(closest.row, closest.col);
-        const end = strategy === PathStrategyMode.TO_THE_DOOR ? door : enemy;
+        let end:GameNode = door;
+
+        if( strategy === PathStrategyMode.TO_THE_CLOSEST_ENEMY ){
+            const enemies = battlefield.attackers.includes(fighter) ? battlefield.defenders : battlefield.attackers;
+            const closest = Utils.getClosestEnemyIn(enemies, fighter.row, fighter.col);
+            if( closest == null )
+                return [];
+
+            const enemy = battlefield.grid.getAt(closest.row, closest.col);
+            end = enemy;
+        }
+
         this._pathfinder.resetGraphe(battlefield.grid);
         const path = this._pathfinder.findPath(battlefield.grid, start, end, false );
         if( path.length == 0 )

@@ -45,7 +45,28 @@ describe('GameOverCommand test suite',
         expect(info.isDoorDead).toBe(bf.door.hp == 0);
     });
 
-    it('defender loses :  (0 attackers)  (1+ winner)', 
+    it(' no game over : (0 attacker) (1+ incoming atk)', 
+    async ()=>{
+        // given 
+        const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
+        const bf = repository.getOneBy('id', data.id);
+        
+        // when 
+        bf.attackers = []; // 0 attackers
+        // 1+ incoming attackers
+        const info:GameOverInfoType = await facade.query(AppConst.GAME_OVER, {id:data.id});
+        
+        // // then 
+        expect(info).toBeTruthy();
+        expect(info.gameover).toBeFalse();
+        expect(info.attackerWins).toBeFalse();
+        expect(info.defenderWins).toBeFalse();
+        expect(info.defenders.length).toEqual(bf.defenders.length);
+        expect(info.attackers.length).toEqual(bf.attackers.length);
+        expect(info.isDoorDead).toBe(bf.door.hp == 0);
+    });
+
+    it('defender loses :  (0 attackers) (0 incoming atk)  (1+ winner)', 
     async ()=>{
         // given 
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
@@ -53,7 +74,8 @@ describe('GameOverCommand test suite',
         const bf = repository.getOneBy('id', data.id);
         
         // when 
-        bf.attackers = [];
+        bf.attackers = []; // 0 attackers
+        bf.atkSpawners.forEach(s=>s.fighters = []); // 0 incoming attackers
         winRepo.add(bf.attackers[0]);
         const info:GameOverInfoType = await facade.query(AppConst.GAME_OVER, {id:data.id});
         
@@ -63,7 +85,7 @@ describe('GameOverCommand test suite',
         expect(info.attackerWins).toBeTrue();
     });
 
-    it('defender wins : (0 attackers) (0 winner)', 
+    it('defender wins : (0 attackers) (0 incoming atk) (0 winner)', 
     async ()=>{
         // given 
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
@@ -72,7 +94,8 @@ describe('GameOverCommand test suite',
         
         // when 
         bf.door.hp = 0;
-        bf.attackers = [];
+        bf.attackers = []; // 0 attackers
+        bf.atkSpawners.forEach(s=>s.fighters = []); // 0 incoming attackers
         const info:GameOverInfoType = await facade.query(AppConst.GAME_OVER, {id:data.id});
         
         // // then 

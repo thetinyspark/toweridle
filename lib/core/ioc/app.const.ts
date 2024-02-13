@@ -15,8 +15,6 @@ export default class AppConst{
     static CREATE_BATTLEFIELD:string            = "CreateBattleField";
     static SPAWN_NEW_FIGHTERS:string            = "SpawnNewFighters";
     static SEARCH_FOR_ENNEMIES:string           = "SearchForEnnemies";
-
-    // queries
     static DO_CYCLE:string                      = "DoCycle";
 
     // repositories

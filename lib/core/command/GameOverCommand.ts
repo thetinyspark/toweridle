@@ -39,7 +39,14 @@ export default class GameOverCommand implements ICommand{
         info.defenders = bf.defenders;
         info.winners = winRepo.getAll();
 
-        const numAtkLeft = bf.attackers.length;
+        const numAttackersToSpawn = bf.atkSpawners.reduceRight( 
+            (prev, cur, index)=>{
+                return prev + cur.fighters.length
+            }, 
+            0
+        );
+
+        const numAtkLeft = bf.attackers.length + numAttackersToSpawn;
         const numWinners = info.winners.length;
         const isDoorAlive = bf.defenders.includes(bf.door) && bf.door.hp > 0;
         const isDoorDead = !isDoorAlive;
