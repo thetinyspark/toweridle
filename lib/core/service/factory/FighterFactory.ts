@@ -22,6 +22,7 @@ export default class FighterFactory implements IFactory{
             desc.phyDef, 
             desc.magAtk, 
             desc.magDef, 
+            desc.hp, 
             desc.hp
         );
     }

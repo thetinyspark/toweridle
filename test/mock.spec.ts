@@ -269,7 +269,7 @@ export function ENNEMIES(numRows:number = 10, numCols:number = 10):Fighter[]{
     for( let i = 0; i < numRows; i++ ){
       for( let j = 0; j < numCols; j++ ){
         ennemies.push( 
-            new Fighter(++id, 1, "fighter_"+id, 1, 1, 1, 1, 1, 1, 1, i, j)
+            new Fighter(++id, 1, "fighter_"+id, 1, 1, 1, 1, 1, 1, 1, 1, i, j)
         );
       }
     }

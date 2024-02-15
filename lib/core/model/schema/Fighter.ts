@@ -12,6 +12,7 @@ export default class Fighter{
         public magAtk:number ,
         public magDef:number ,
         public hp:number,
+        public hpMax:number,
         public row:number = 0, 
         public col:number = 0,
         public enemy:Fighter = null,
