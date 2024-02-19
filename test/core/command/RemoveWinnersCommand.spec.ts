@@ -33,7 +33,6 @@ describe('RemoveWinnersCommand test suite',
     async ()=>{
         // given 
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
-        const winRepo:IRepository<Fighter> = facade.getProxy(AppConst.WINNERS_REPOSITORY) as IRepository<Fighter>;
         const bf = repository.getOneBy('id', data.id);
         const fighter1 = bf.attackers[0];
         const before = bf.attackers.length;
@@ -49,14 +48,13 @@ describe('RemoveWinnersCommand test suite',
         // // then 
         expect(ok).toBeTrue();
         expect(bf.attackers.length).toEqual(before-1);
-        expect(winRepo.getAll().length).toEqual(1);
+        expect(bf.winners.length).toEqual(1);
     });
 
     it('should not be able to remove all attackers beyond door (if the door is not dead)', 
     async ()=>{
         // given 
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
-        const winRepo:IRepository<Fighter> = facade.getProxy(AppConst.WINNERS_REPOSITORY) as IRepository<Fighter>;
         const bf = repository.getOneBy('id', data.id);
         const fighter1 = bf.attackers[0];
         const before = bf.attackers.length;
@@ -69,6 +67,6 @@ describe('RemoveWinnersCommand test suite',
         // // then 
         expect(ok).toBeTrue();
         expect(bf.attackers.length).toEqual(before);
-        expect(winRepo.getAll().length).toEqual(0);
+        expect(bf.deadAttackers.length).toEqual(0);
     });
 })

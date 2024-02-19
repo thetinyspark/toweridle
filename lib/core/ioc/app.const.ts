@@ -18,9 +18,6 @@ export default class AppConst{
     static DO_CYCLE:string                      = "DoCycle";
 
     // repositories
-    static DEAD_ATTACKERS_REPOSITORY:string    = "DeadAttackersepository";
-    static DEAD_DEFENDERS_REPOSITORY:string    = "DeadDefendersRepository";
-    static WINNERS_REPOSITORY:string           = "WinnersRepository";
     static BATTLEFIELD_REPOSITORY:string       = "BattleFieldRepository";
 
     // factories

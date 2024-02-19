@@ -19,8 +19,6 @@ export default class RemoveDeadFightersCommand implements ICommand{
         const facade:Facade = notification.getEmitter() as Facade;
         const data:any = notification.getPayload() as any; 
         const bfRepo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
-        const atkRepo = facade.getProxy(AppConst.DEAD_ATTACKERS_REPOSITORY) as IRepository<Fighter>;
-        const defRepo = facade.getProxy(AppConst.DEAD_DEFENDERS_REPOSITORY) as IRepository<Fighter>;
         const bf = bfRepo.getOneBy('id', data.id);
         
         if( bf === null )
@@ -30,7 +28,7 @@ export default class RemoveDeadFightersCommand implements ICommand{
             (fighter)=>{
                 if( fighter.hp <= 0 ){
                     bf.attackers.splice(bf.attackers.indexOf(fighter), 1);
-                    atkRepo.add(fighter);
+                    bf.deadAttackers.push(fighter);
                 }
             }
         );
@@ -39,7 +37,7 @@ export default class RemoveDeadFightersCommand implements ICommand{
             (fighter)=>{
                 if( fighter.hp <= 0 ){
                     bf.defenders.splice(bf.defenders.indexOf(fighter), 1);
-                    defRepo.add(fighter);
+                    bf.deadDefenders.push(fighter);
                 }
             }
         );

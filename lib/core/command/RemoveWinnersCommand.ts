@@ -19,7 +19,6 @@ export default class RemoveWinnersCommand implements ICommand{
         const facade:Facade = notification.getEmitter() as Facade;
         const data:any = notification.getPayload() as any;       
         const bfRepo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
-        const winRepo = facade.getProxy(AppConst.WINNERS_REPOSITORY) as IRepository<Fighter>;
         const bf = bfRepo.getOneBy('id', data.id);
         if( bf === null )
             return false;
@@ -31,7 +30,7 @@ export default class RemoveWinnersCommand implements ICommand{
             (fighter)=>{
                 if( fighter.row === bf.targetRow && fighter.col === bf.targetCol ){
                     bf.attackers.splice(bf.attackers.indexOf(fighter), 1);
-                    winRepo.add(fighter);
+                    bf.winners.push(fighter);
                 }
             }
         );

@@ -40,9 +40,6 @@ export function configIOC(container:Container){
 
     // repositories
     container.register(AppConst.BATTLEFIELD_REPOSITORY          ,   ()=>  new BattleFieldRepository(container.resolve(AppConst.GAME_STORE_MODEL), "battlefields")   , true      );
-    container.register(AppConst.WINNERS_REPOSITORY              ,   ()=>  new BattleFieldRepository(container.resolve(AppConst.GAME_STORE_MODEL), "winners")        , true      );
-    container.register(AppConst.DEAD_ATTACKERS_REPOSITORY       ,   ()=>  new BattleFieldRepository(container.resolve(AppConst.GAME_STORE_MODEL), "deadfenders")    , true      );
-    container.register(AppConst.DEAD_DEFENDERS_REPOSITORY       ,   ()=>  new BattleFieldRepository(container.resolve(AppConst.GAME_STORE_MODEL), "deadtackers")    , true      );
 
     // services
     container.register( AppConst.FIGHTER_FACTORY                ,   ()=>  new FighterFactory(container.resolve(AppConst.UID_SERVICE))                               , true      );
@@ -86,9 +83,6 @@ export function configFacade(container:Container){
 
     //repositories
     facade.registerProxy( AppConst.BATTLEFIELD_REPOSITORY   , container.resolve(AppConst.BATTLEFIELD_REPOSITORY)    );
-    facade.registerProxy( AppConst.WINNERS_REPOSITORY       , container.resolve(AppConst.WINNERS_REPOSITORY)        );
-    facade.registerProxy( AppConst.DEAD_ATTACKERS_REPOSITORY, container.resolve(AppConst.DEAD_ATTACKERS_REPOSITORY) );
-    facade.registerProxy( AppConst.DEAD_DEFENDERS_REPOSITORY, container.resolve(AppConst.DEAD_DEFENDERS_REPOSITORY) );
 
     // services
     facade.registerService( AppConst.PATH_SERVICE           , container.resolve(AppConst.PATH_SERVICE)              );

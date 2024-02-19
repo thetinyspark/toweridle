@@ -56,8 +56,6 @@ describe('RemoveDeadFightersCommand test suite',
     async ()=>{
         // given 
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
-        const deadfenders:IRepository<Fighter> = facade.getProxy(AppConst.DEAD_DEFENDERS_REPOSITORY) as IRepository<Fighter>;
-        const deadtackers:IRepository<Fighter> = facade.getProxy(AppConst.DEAD_ATTACKERS_REPOSITORY) as IRepository<Fighter>;
         const bf = repository.getOneBy('id', data.id);
         const fighter1 = bf.attackers[0];
         const fighter2 = bf.defenders[1];
@@ -70,9 +68,9 @@ describe('RemoveDeadFightersCommand test suite',
         const ok = await facade.query(AppConst.REMOVE_DEAD_FIGHTERS, {id:data.id});
         
         // // then 
-        expect(deadfenders.getAll().length).toEqual(1);
-        expect(deadfenders.getAll()[0]).toEqual(fighter2);
-        expect(deadtackers.getAll().length).toEqual(1);
-        expect(deadtackers.getAll()[0]).toEqual(fighter1);
+        expect(bf.deadDefenders.length).toEqual(1);
+        expect(bf.deadDefenders[0]).toEqual(fighter2);
+        expect(bf.deadAttackers.length).toEqual(1);
+        expect(bf.deadAttackers[0]).toEqual(fighter1);
     });
 })

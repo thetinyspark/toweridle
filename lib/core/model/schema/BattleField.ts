@@ -18,5 +18,8 @@ export default class
         public grid:Grid2D<GameNode>,
         public attackers:Fighter[] = [], 
         public defenders:Fighter[] = [], 
+        public winners:Fighter[] = [], 
+        public deadDefenders:Fighter[] = [], 
+        public deadAttackers:Fighter[] = [], 
     ){}
 }

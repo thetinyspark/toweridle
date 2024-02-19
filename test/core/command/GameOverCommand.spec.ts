@@ -89,13 +89,12 @@ describe('GameOverCommand test suite',
     async ()=>{
         // given 
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
-        const winRepo:IRepository<Fighter> = facade.getProxy(AppConst.WINNERS_REPOSITORY) as IRepository<Fighter>;
         const bf = repository.getOneBy('id', data.id);
         
         // when 
         bf.attackers = []; // 0 attackers
         bf.atkSpawners.forEach(s=>s.fighters = []); // 0 incoming attackers
-        winRepo.add(bf.attackers[0]);
+        bf.winners.push(bf.attackers[0]);
         const info:GameOverInfoType = await facade.query(AppConst.GAME_OVER, {id:data.id});
         
         // // then 
@@ -108,7 +107,6 @@ describe('GameOverCommand test suite',
     async ()=>{
         // given 
         const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
-        const winRepo:IRepository<Fighter> = facade.getProxy(AppConst.WINNERS_REPOSITORY) as IRepository<Fighter>;
         const bf = repository.getOneBy('id', data.id);
         
         // when 
