@@ -152,7 +152,7 @@ export default class Grid2D<T> {
   public static from<T>(data:T[][]):Grid2D<T>{
     const grid = new Grid2D<T>();
     const rows = data.length; 
-    const cols = data[0]?.length || 0;
+    const cols = data.length == 0 ? 0 : data[0].length;
     grid.reset(rows, cols);
     for (let i: number = 0; i < rows; i++) {
       for (let j: number = 0; j < cols; j++) {

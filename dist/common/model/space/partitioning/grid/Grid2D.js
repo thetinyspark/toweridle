@@ -122,7 +122,7 @@ class Grid2D {
     static from(data) {
         const grid = new Grid2D();
         const rows = data.length;
-        const cols = data[0]?.length || 0;
+        const cols = data.length == 0 ? 0 : data[0].length;
         grid.reset(rows, cols);
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
