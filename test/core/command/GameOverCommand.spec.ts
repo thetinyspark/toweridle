@@ -26,6 +26,25 @@ describe('GameOverCommand test suite',
     );
 
 
+    it('should be able to get dead attackers and dead defenders', 
+    async ()=>{
+        // given 
+        const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
+        const bf = repository.getOneBy('id', data.id);
+        
+        // when 
+        bf.attackers.forEach( a => a.hp = 0);
+        bf.defenders.forEach( a => a.hp = 0);
+        await facade.query(AppConst.REMOVE_DEAD_FIGHTERS, {id:data.id});
+        const info:GameOverInfoType = await facade.query(AppConst.GAME_OVER, {id:data.id});
+        
+        // // then 
+        expect(info).toBeTruthy();
+        expect(info.gameover).toBeFalse();
+        expect(info.deadAttackers.length).toBeGreaterThan(0);
+        expect(info.deadDefenders.length).toBeGreaterThan(0);
+    });
+
     it(' no game over : (1+ attacker)', 
     async ()=>{
         // given 

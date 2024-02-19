@@ -4,6 +4,7 @@ import AppConst from "../../../lib/core/ioc/app.const";
 import { BATTLEFIELD1 } from "../../mock.spec";
 import BattleField from "../../../lib/core/model/schema/BattleField";
 import IRepository from "../../../lib/core/model/repository/IRepository";
+import Fighter from "../../../lib/core/model/schema/Fighter";
 
 
 describe('RemoveDeadFightersCommand test suite', 
@@ -49,5 +50,29 @@ describe('RemoveDeadFightersCommand test suite',
         // // then 
         expect(ok).toBeTrue();
         expect(after).toEqual(expected);
+    });
+
+    it('should be able to get all dead attackers and defenders from repository', 
+    async ()=>{
+        // given 
+        const repository:IRepository<BattleField> = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
+        const deadfenders:IRepository<Fighter> = facade.getProxy(AppConst.DEAD_DEFENDERS_REPOSITORY) as IRepository<Fighter>;
+        const deadtackers:IRepository<Fighter> = facade.getProxy(AppConst.DEAD_ATTACKERS_REPOSITORY) as IRepository<Fighter>;
+        const bf = repository.getOneBy('id', data.id);
+        const fighter1 = bf.attackers[0];
+        const fighter2 = bf.defenders[1];
+
+            // force hp 
+        fighter1.hp = 0;
+        fighter2.hp = 0;
+
+        // when 
+        const ok = await facade.query(AppConst.REMOVE_DEAD_FIGHTERS, {id:data.id});
+        
+        // // then 
+        expect(deadfenders.getAll().length).toEqual(1);
+        expect(deadfenders.getAll()[0]).toEqual(fighter2);
+        expect(deadtackers.getAll().length).toEqual(1);
+        expect(deadtackers.getAll()[0]).toEqual(fighter1);
     });
 })

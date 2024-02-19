@@ -16,6 +16,8 @@ class GameOverCommand {
         const data = notification.getPayload();
         const bfRepo = facade.getProxy(app_const_1.default.BATTLEFIELD_REPOSITORY);
         const winRepo = facade.getProxy(app_const_1.default.WINNERS_REPOSITORY);
+        const defRepo = facade.getProxy(app_const_1.default.DEAD_DEFENDERS_REPOSITORY);
+        const atkRepo = facade.getProxy(app_const_1.default.DEAD_ATTACKERS_REPOSITORY);
         const bf = bfRepo.getOneBy('id', data.id);
         const info = {
             attackers: [],
@@ -24,8 +26,12 @@ class GameOverCommand {
             attackerWins: false,
             defenderWins: false,
             gameover: false,
-            isDoorDead: false
+            isDoorDead: false,
+            deadAttackers: [],
+            deadDefenders: []
         };
+        info.deadAttackers = atkRepo.getAll();
+        info.deadDefenders = defRepo.getAll();
         if (bf === null)
             return info;
         info.attackers = bf.attackers;

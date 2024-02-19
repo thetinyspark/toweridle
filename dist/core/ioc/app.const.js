@@ -19,6 +19,8 @@ AppConst.SPAWN_NEW_FIGHTERS = "SpawnNewFighters";
 AppConst.SEARCH_FOR_ENNEMIES = "SearchForEnnemies";
 AppConst.DO_CYCLE = "DoCycle";
 // repositories
+AppConst.DEAD_ATTACKERS_REPOSITORY = "DeadAttackersepository";
+AppConst.DEAD_DEFENDERS_REPOSITORY = "DeadDefendersRepository";
 AppConst.WINNERS_REPOSITORY = "WinnersRepository";
 AppConst.BATTLEFIELD_REPOSITORY = "BattleFieldRepository";
 // factories

@@ -21,6 +21,8 @@ export default class GameOverCommand implements ICommand{
         const data:any = notification.getPayload() as any;       
         const bfRepo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as IRepository<BattleField>;
         const winRepo = facade.getProxy(AppConst.WINNERS_REPOSITORY) as IRepository<Fighter>;
+        const defRepo = facade.getProxy(AppConst.DEAD_DEFENDERS_REPOSITORY) as IRepository<Fighter>;
+        const atkRepo = facade.getProxy(AppConst.DEAD_ATTACKERS_REPOSITORY) as IRepository<Fighter>;
         const bf = bfRepo.getOneBy('id', data.id);
         const info:GameOverInfoType = {
             attackers: [], 
@@ -29,8 +31,13 @@ export default class GameOverCommand implements ICommand{
             attackerWins: false, 
             defenderWins: false, 
             gameover: false, 
-            isDoorDead: false
+            isDoorDead: false, 
+            deadAttackers: [], 
+            deadDefenders: []
         };
+
+        info.deadAttackers = atkRepo.getAll();
+        info.deadDefenders = defRepo.getAll();
 
         if( bf === null )
             return info;

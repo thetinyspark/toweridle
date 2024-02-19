@@ -7,4 +7,6 @@ export declare type GameOverInfoType = {
     attackers: Fighter[];
     defenderWins: boolean;
     attackerWins: boolean;
+    deadAttackers: Fighter[];
+    deadDefenders: Fighter[];
 };
