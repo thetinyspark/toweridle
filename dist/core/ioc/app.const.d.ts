@@ -11,9 +11,6 @@ export default class AppConst {
     static SPAWN_NEW_FIGHTERS: string;
     static SEARCH_FOR_ENNEMIES: string;
     static DO_CYCLE: string;
-    static DEAD_ATTACKERS_REPOSITORY: string;
-    static DEAD_DEFENDERS_REPOSITORY: string;
-    static WINNERS_REPOSITORY: string;
     static BATTLEFIELD_REPOSITORY: string;
     static FIGHTER_FACTORY: string;
     static SPAWNER_FACTORY: string;

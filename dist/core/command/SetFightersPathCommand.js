@@ -21,6 +21,9 @@ class SetFightersPathCommand {
         if (bf === null)
             return false;
         bf.attackers.forEach((fighter) => {
+            // dont recalculate path to the door, cause it cannot move.
+            // if(fighter.path.length > 0) 
+            //     return;
             fighter.path = pathService.findPath(fighter, bf, PathStrategyMode_1.default.TO_THE_DOOR);
         });
         bf.defenders.forEach((fighter) => {

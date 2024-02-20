@@ -28,9 +28,6 @@ function configIOC(container) {
     container.register(app_const_1.default.GAME_STORE_MODEL, () => new coffe_maker_1.StoreModel(), true);
     // repositories
     container.register(app_const_1.default.BATTLEFIELD_REPOSITORY, () => new BattleFieldRepository_1.default(container.resolve(app_const_1.default.GAME_STORE_MODEL), "battlefields"), true);
-    container.register(app_const_1.default.WINNERS_REPOSITORY, () => new BattleFieldRepository_1.default(container.resolve(app_const_1.default.GAME_STORE_MODEL), "winners"), true);
-    container.register(app_const_1.default.DEAD_ATTACKERS_REPOSITORY, () => new BattleFieldRepository_1.default(container.resolve(app_const_1.default.GAME_STORE_MODEL), "deadfenders"), true);
-    container.register(app_const_1.default.DEAD_DEFENDERS_REPOSITORY, () => new BattleFieldRepository_1.default(container.resolve(app_const_1.default.GAME_STORE_MODEL), "deadtackers"), true);
     // services
     container.register(app_const_1.default.FIGHTER_FACTORY, () => new FighterFactory_1.default(container.resolve(app_const_1.default.UID_SERVICE)), true);
     container.register(app_const_1.default.UID_SERVICE, () => new UIDService_1.default(), true);
@@ -56,9 +53,6 @@ function configFacade(container) {
     facade.registerCommand(app_const_1.default.REMOVE_WINNERS, container.get(app_const_1.default.REMOVE_WINNERS));
     //repositories
     facade.registerProxy(app_const_1.default.BATTLEFIELD_REPOSITORY, container.resolve(app_const_1.default.BATTLEFIELD_REPOSITORY));
-    facade.registerProxy(app_const_1.default.WINNERS_REPOSITORY, container.resolve(app_const_1.default.WINNERS_REPOSITORY));
-    facade.registerProxy(app_const_1.default.DEAD_ATTACKERS_REPOSITORY, container.resolve(app_const_1.default.DEAD_ATTACKERS_REPOSITORY));
-    facade.registerProxy(app_const_1.default.DEAD_DEFENDERS_REPOSITORY, container.resolve(app_const_1.default.DEAD_DEFENDERS_REPOSITORY));
     // services
     facade.registerService(app_const_1.default.PATH_SERVICE, container.resolve(app_const_1.default.PATH_SERVICE));
     facade.registerService(app_const_1.default.UID_SERVICE, container.resolve(app_const_1.default.UID_SERVICE));

@@ -15,5 +15,8 @@ export default class {
     grid: Grid2D<GameNode>;
     attackers: Fighter[];
     defenders: Fighter[];
-    constructor(id: number, name: string, attackerID: number, defenderID: number, atkSpawners: Spawner[], dfdSpawners: Spawner[], door: Fighter, targetRow: number, targetCol: number, grid: Grid2D<GameNode>, attackers?: Fighter[], defenders?: Fighter[]);
+    winners: Fighter[];
+    deadDefenders: Fighter[];
+    deadAttackers: Fighter[];
+    constructor(id: number, name: string, attackerID: number, defenderID: number, atkSpawners: Spawner[], dfdSpawners: Spawner[], door: Fighter, targetRow: number, targetCol: number, grid: Grid2D<GameNode>, attackers?: Fighter[], defenders?: Fighter[], winners?: Fighter[], deadDefenders?: Fighter[], deadAttackers?: Fighter[]);
 }

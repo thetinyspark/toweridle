@@ -27,6 +27,10 @@ export default class SetFightersPathCommand implements ICommand{
 
         bf.attackers.forEach( 
             (fighter)=>{
+                // dont recalculate path to the door, cause it cannot move.
+                // if(fighter.path.length > 0) 
+                //     return;
+
                 fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_DOOR);
             }
         );
