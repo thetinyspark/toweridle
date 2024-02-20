@@ -13,7 +13,11 @@ export default class PathService implements IPathService{
         this._pathfinder = new PathFinder2D();
     }
 
-    findPath(fighter: Fighter, battlefield: BattleField, strategy: PathStrategyMode): GameNode[] {
+    getPathFinder() {
+        return this._pathfinder;
+    }
+
+    findPath(fighter: Fighter, battlefield: BattleField, strategy: PathStrategyMode, optimize:boolean = false): GameNode[] {
         const start = battlefield.grid.getAt(fighter.row, fighter.col);
         const door = battlefield.grid.getAt(battlefield.door.row, battlefield.door.col);
         let end:GameNode = door;
@@ -29,11 +33,19 @@ export default class PathService implements IPathService{
             end = enemy;
         }
 
+       
+
         // if enemy is in the same position than end node, then dont recalculate path
-        if( fighter.path.length > 0 ){
+        if( fighter.path.length > 0 && optimize){
             const last = fighter.path[fighter.path.length-1];
-            if( last.state.row == end.state.row && last.state.col == end.state.col)
+            if( last.state.row == end.state.row && last.state.col == end.state.col){
+
+                const path = fighter.path;
+                if( path[0].state.row == fighter.row && path[0].state.col == fighter.col )
+                    path.shift();
+
                 return fighter.path;
+            }
         }
 
 

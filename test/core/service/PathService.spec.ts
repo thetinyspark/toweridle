@@ -57,4 +57,45 @@ describe("PathService test suite", () => {
     expect(pathToEnemy[0].state.row === fighter.row && pathToEnemy[0].state.col === fighter.col).toBeFalse();
 
   });
+
+  it("should be able to skip path recalculation if same start & end (and should return same path on both versions)", async () => {
+    // given
+    const facade = setup() as Facade;
+    const data = BATTLEFIELD1();
+    const service = facade.getService(AppConst.PATH_SERVICE) as PathService;
+    const repo = facade.getProxy(AppConst.BATTLEFIELD_REPOSITORY) as Repository<BattleField>;
+
+    
+    // when 
+    await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+    await facade.query(AppConst.SPAWN_NEW_FIGHTERS, {id: data.id, numCycle:2});
+    await facade.query(AppConst.SEARCH_FOR_ENNEMIES, {id: data.id});
+    
+    const battlefield = repo.getOneBy('id',1) as BattleField;
+    const fighter = battlefield.attackers[0];
+    const pathfinder = service.getPathFinder();
+    const spy = spyOn(pathfinder, "resetGraphe");
+
+    // to the door
+    const pathToDoor = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_DOOR );
+
+    // we are targeting the door already
+    fighter.path = pathToDoor;
+    const pathToDoor2 = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_DOOR, true );
+
+
+
+    // to the closest enemy
+    const pathToEnemy = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_CLOSEST_ENEMY );
+
+    // we are targeting the same node than the closest enemy already
+    fighter.path = pathToEnemy;
+    const pathToEnemy2 = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_CLOSEST_ENEMY, true );
+
+    // then
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(pathToDoor).toEqual(pathToDoor2);
+    expect(pathToEnemy).toEqual(pathToEnemy2);
+
+  });
 });

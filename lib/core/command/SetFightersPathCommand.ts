@@ -27,11 +27,7 @@ export default class SetFightersPathCommand implements ICommand{
 
         bf.attackers.forEach( 
             (fighter)=>{
-                // dont recalculate path to the door, cause it cannot move.
-                // if(fighter.path.length > 0) 
-                //     return;
-
-                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_DOOR);
+                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_DOOR, data.optimize);
             }
         );
 
@@ -40,7 +36,7 @@ export default class SetFightersPathCommand implements ICommand{
                 if( fighter === bf.door )
                     return;
 
-                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_CLOSEST_ENEMY);
+                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_CLOSEST_ENEMY,data.optimize);
             }
         );
 

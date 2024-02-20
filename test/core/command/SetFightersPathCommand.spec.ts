@@ -80,4 +80,32 @@ describe('SetFightersPathCommand test suite',
         expect(nopathAtk.length).not.toEqual(0);
         expect(nopathDef.length).not.toEqual(0); 
     });
+
+    it('should be able to get the same wether it is optimized or not', 
+    async ()=>{
+        // given 
+        const facade        = setup() as Facade;
+        const data          = BATTLEFIELD1();
+        // when 
+        const bf    = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+        const bf2   = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+        await facade.query(AppConst.SPAWN_NEW_FIGHTERS, {id: bf.id, numCycle:2});
+        await facade.query(AppConst.SET_FIGHTERS_PATH, {id: bf.id,optimize:false});
+
+        await facade.query(AppConst.SPAWN_NEW_FIGHTERS, {id: bf2.id, numCycle:2});
+        await facade.query(AppConst.SET_FIGHTERS_PATH, {id: bf2.id, optimize:true});
+
+
+        for( let i = 0; i < bf.attackers.length; i++){
+            const path1 = bf.attackers[i].path;
+            const path2 = bf2.attackers[i].path;
+            expect(path1).toEqual(path2);
+        }
+
+        for( let i = 0; i < bf.defenders.length; i++){
+            const path1 = bf.defenders[i].path;
+            const path2 = bf2.defenders[i].path;
+            expect(path1).toEqual(path2);
+        }
+    });
 })
