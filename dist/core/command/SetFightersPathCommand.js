@@ -21,12 +21,17 @@ class SetFightersPathCommand {
         if (bf === null)
             return false;
         bf.attackers.forEach((fighter) => {
-            fighter.path = pathService.findPath(fighter, bf, PathStrategyMode_1.default.TO_THE_DOOR, data.optimize);
+            if (fighter.path.length > 0) {
+                if (fighter.col == fighter.path[0].state.col && fighter.row == fighter.path[0].state.row)
+                    fighter.path.shift();
+                return;
+            }
+            fighter.path = pathService.findPath(fighter, bf, PathStrategyMode_1.default.TO_THE_DOOR);
         });
         bf.defenders.forEach((fighter) => {
             if (fighter === bf.door)
                 return;
-            fighter.path = pathService.findPath(fighter, bf, PathStrategyMode_1.default.TO_THE_CLOSEST_ENEMY, data.optimize);
+            fighter.path = pathService.findPath(fighter, bf, PathStrategyMode_1.default.TO_THE_CLOSEST_ENEMY);
         });
         return true;
     }

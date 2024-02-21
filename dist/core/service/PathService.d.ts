@@ -8,5 +8,5 @@ export default class PathService implements IPathService {
     private _pathfinder;
     constructor();
     getPathFinder(): PathFinder2D;
-    findPath(fighter: Fighter, battlefield: BattleField, strategy: PathStrategyMode, optimize?: boolean): GameNode[];
+    findPath(fighter: Fighter, battlefield: BattleField, strategy: PathStrategyMode): GameNode[];
 }

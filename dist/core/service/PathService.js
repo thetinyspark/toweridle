@@ -10,20 +10,20 @@ class PathService {
     getPathFinder() {
         return this._pathfinder;
     }
-    findPath(fighter, battlefield, strategy, optimize = false) {
+    findPath(fighter, battlefield, strategy) {
         const start = battlefield.grid.getAt(fighter.row, fighter.col);
         const door = battlefield.grid.getAt(battlefield.door.row, battlefield.door.col);
         let end = door;
         if (strategy === PathStrategyMode_1.default.TO_THE_CLOSEST_ENEMY) {
             const enemies = battlefield.attackers.includes(fighter) ? battlefield.defenders : battlefield.attackers;
-            const closest = Utils_1.default.getClosestEnemyIn(enemies, fighter.row, fighter.col);
+            const closest = fighter.enemy !== null ? fighter.enemy : Utils_1.default.getClosestEnemyIn(enemies, fighter.row, fighter.col);
             if (closest == null)
                 return [];
             const enemy = battlefield.grid.getAt(closest.row, closest.col);
             end = enemy;
         }
-        // if enemy is in the same position than end node, then dont recalculate path
-        if (fighter.path.length > 0 && optimize) {
+        // if enemy is in the same position than end node, then don't recalculate path
+        if (fighter.path.length > 0) {
             const last = fighter.path[fighter.path.length - 1];
             if (last.state.row == end.state.row && last.state.col == end.state.col) {
                 const path = fighter.path;
