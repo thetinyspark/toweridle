@@ -17,7 +17,7 @@ export default class PathService implements IPathService{
         return this._pathfinder;
     }
 
-    findPath(fighter: Fighter, battlefield: BattleField, strategy: PathStrategyMode, optimize:boolean = false): GameNode[] {
+    findPath(fighter: Fighter, battlefield: BattleField, strategy: PathStrategyMode): GameNode[] {
         const start = battlefield.grid.getAt(fighter.row, fighter.col);
         const door = battlefield.grid.getAt(battlefield.door.row, battlefield.door.col);
         let end:GameNode = door;
@@ -25,7 +25,7 @@ export default class PathService implements IPathService{
 
         if( strategy === PathStrategyMode.TO_THE_CLOSEST_ENEMY ){
             const enemies = battlefield.attackers.includes(fighter) ? battlefield.defenders : battlefield.attackers;
-            const closest = Utils.getClosestEnemyIn(enemies, fighter.row, fighter.col);
+            const closest = fighter.enemy !== null ? fighter.enemy : Utils.getClosestEnemyIn(enemies, fighter.row, fighter.col);
             if( closest == null )
                 return [];
 
@@ -35,8 +35,8 @@ export default class PathService implements IPathService{
 
        
 
-        // if enemy is in the same position than end node, then dont recalculate path
-        if( fighter.path.length > 0 && optimize){
+        // if enemy is in the same position than end node, then don't recalculate path
+        if( fighter.path.length > 0 ){
             const last = fighter.path[fighter.path.length-1];
             if( last.state.row == end.state.row && last.state.col == end.state.col){
 

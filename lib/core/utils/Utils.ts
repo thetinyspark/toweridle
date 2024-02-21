@@ -30,11 +30,11 @@ export default class Utils{
 
         return ennemies.filter( 
             (enemy)=>{
-                return ( 
-                    enemy.col >= minCol && 
-                    enemy.col <= maxCol && 
-                    enemy.row >= minRow && 
-                    enemy.row <= maxRow
+                return !( 
+                    enemy.col < minCol || 
+                    enemy.col > maxCol || 
+                    enemy.row < minRow ||
+                    enemy.row > maxRow
                 );
             }
         );

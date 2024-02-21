@@ -27,7 +27,13 @@ export default class SetFightersPathCommand implements ICommand{
 
         bf.attackers.forEach( 
             (fighter)=>{
-                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_DOOR, data.optimize);
+                if( fighter.path.length > 0){
+                    if( fighter.col == fighter.path[0].state.col && fighter.row == fighter.path[0].state.row)
+                        fighter.path.shift();
+                    
+                    return;
+                }
+                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_DOOR);
             }
         );
 
@@ -36,7 +42,7 @@ export default class SetFightersPathCommand implements ICommand{
                 if( fighter === bf.door )
                     return;
 
-                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_CLOSEST_ENEMY,data.optimize);
+                fighter.path = pathService.findPath(fighter, bf, PathStrategyMode.TO_THE_CLOSEST_ENEMY);
             }
         );
 

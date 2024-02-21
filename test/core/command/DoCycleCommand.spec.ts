@@ -36,28 +36,22 @@ describe('DoCycleCommand test suite',
         expect(info1.gameover).toBeTrue();
     });
 
-    it('should be able to have the same result wether it is optimized or not', 
+    xit('************* benchmark *******************', 
     async ()=>{
         // given 
         const facade        = setup() as Facade;
         const data          = BATTLEFIELD1();
 
         // push those variables if you want to stress the test
-        data.atkSpawners[0].fighters[0].amount = 10;
-        data.dfdSpawners[0].fighters[0].amount = 10;
+        data.atkSpawners[0].fighters[0].amount = 400;
+        data.dfdSpawners[0].fighters[0].amount = 400;
 
         // when 
-        const complete = true;
         const bf1 = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
-        const bf2 = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
-
-        const info1:GameOverInfoType = await facade.query(AppConst.DO_CYCLE, {id:bf1.id, numCycle: 1, complete, optimize:false});
-        const info2:GameOverInfoType = await facade.query(AppConst.DO_CYCLE, {id:bf2.id, numCycle: 1, complete, optimize:true});
+        const start = Date.now();
+        await facade.query(AppConst.DO_CYCLE, {id:bf1.id, numCycle: 1, complete:true});
+        const time = Date.now() - start;
         // // then 
-        expect(info1.attackerWins).toEqual(info2.attackerWins);
-        expect(info1.defenderWins).toEqual(info2.defenderWins);
-        expect(info1.attackers.length).toEqual(info2.attackers.length);
-        expect(info1.defenders.length).toEqual(info2.defenders.length);
-        expect(info1.winners.length).toEqual(info2.winners.length);
+        expect(time).toEqual(0);
     });
 })
