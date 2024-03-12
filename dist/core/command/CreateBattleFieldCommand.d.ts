@@ -11,5 +11,5 @@ import BattleField from "../model/schema/BattleField";
  * ```
  */
 export default class CreateBattleFieldCommand implements ICommand {
-    execute(notification: INotification): BattleField;
+    execute(notification: INotification): boolean | BattleField;
 }

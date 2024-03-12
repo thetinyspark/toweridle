@@ -1,7 +1,7 @@
 import { Facade } from "@thetinyspark/coffe-maker";
 import { setup } from "../../setup.spec";
 import AppConst from "../../../lib/core/ioc/app.const";
-import { BATTLEFIELD1 } from "../../mock.spec";
+import { BATTLEFIELD1, INVALID_BATTLEFIELD } from "../../mock.spec";
 import BattleField from "../../../lib/core/model/schema/BattleField";
 import IRepository from "../../../lib/core/model/repository/IRepository";
 
@@ -49,5 +49,17 @@ describe('CreateBattleFieldCommand test suite',
         expect(battlefield.name).toEqual(data.name);
         expect(battlefield.targetCol).toEqual(data.targetCol);
         expect(battlefield.targetRow).toEqual(data.targetRow);
+    });
+
+    it('should not be able to create a battlefield if there is no path between spawners and target', 
+    async ()=>{
+        // given 
+        const facade        = setup() as Facade;
+        const data          = INVALID_BATTLEFIELD();
+        // when 
+        const bf = await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+        
+        // // then 
+        expect(bf).toBeFalse();
     });
 })

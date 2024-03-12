@@ -1,7 +1,7 @@
 import { Facade } from "@thetinyspark/coffe-maker";
 import { setup } from "../../setup.spec";
 import AppConst from "../../../lib/core/ioc/app.const";
-import { BATTLEFIELD1, BATTLEFIELD5 } from "../../mock.spec";
+import { BATTLEFIELD1, BATTLEFIELD5, NO_DEFENDERS_BATTLEFIELD } from "../../mock.spec";
 import { GameOverInfoType } from "../../../lib/core/model/types/GameOverInfoType";
 
 
@@ -27,6 +27,20 @@ describe('DoCycleCommand test suite',
         // given 
         const facade        = setup() as Facade;
         const data          = BATTLEFIELD1();
+        // when 
+        await facade.query(AppConst.CREATE_BATTLEFIELD, data);
+        const info1:GameOverInfoType = await facade.query(AppConst.DO_CYCLE, {id:data.id, numCycle: 1, complete:true});
+        
+        // // then 
+        expect(info1).toBeTruthy();
+        expect(info1.gameover).toBeTrue();
+    });
+
+    it('should be able to simulate entire fight even if there is defenders', 
+    async ()=>{
+        // given 
+        const facade        = setup() as Facade;
+        const data          = NO_DEFENDERS_BATTLEFIELD();
         // when 
         await facade.query(AppConst.CREATE_BATTLEFIELD, data);
         const info1:GameOverInfoType = await facade.query(AppConst.DO_CYCLE, {id:data.id, numCycle: 1, complete:true});

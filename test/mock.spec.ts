@@ -276,3 +276,107 @@ export function ENNEMIES(numRows:number = 10, numCols:number = 10):Fighter[]{
 
     return ennemies;
 }
+
+
+
+export function NO_DEFENDERS_BATTLEFIELD(){
+
+    return {
+    id: 1,
+    name: "plaines vides",
+    atkSpawners: [
+        {
+        "row":4,"col":1,"frequency":1,"id":1,"name":"spawner_atk","ownerID":1,"fighters":[
+            {"amount":10,"desc":{"id":1,"tplID":4,"name":"wizard IV","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":10,"desc":{"id":1,"tplID":3,"name":"wizard III","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":10,"desc":{"id":1,"tplID":2,"name":"wizard II","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":10,"desc":{"id":1,"tplID":1,"name":"wizard","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}}
+        ]
+        }
+    ],
+    dfdSpawners: [
+        {
+        "row":0,"col":1,"frequency":1,"id":2,"name":"defender_atk","ownerID":2,"fighters":[
+            {"amount":0,"desc":{"id":1,"tplID":4,"name":"wizard IV","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":0,"desc":{"id":1,"tplID":3,"name":"wizard III","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":0,"desc":{"id":1,"tplID":2,"name":"wizard II","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":0,"desc":{"id":1,"tplID":1,"name":"wizard","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}}
+        ]
+        }
+    ],
+    attackerID: 1, 
+    defenderID: 2, 
+    door: {
+        id: 1, 
+        tplID: 3,
+        name: "door",
+        hp: 100, 
+        magAtk: 0, 
+        magDef: 0, 
+        phyAtk: 0, 
+        phyDef: 0, 
+        radius: 0, 
+        speed: 0
+    }, 
+    grid: [
+        [1,0,1,1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1,1,0,1],
+        [1,0,0,0,0,0,0,0,0,1],
+        [1,0,1,1,1,1,1,1,1,1]
+    ], 
+    targetCol: 1,
+    targetRow: 0
+    }
+}
+
+export function INVALID_BATTLEFIELD(){
+
+    return {
+    id: 1,
+    name: "plaines vides",
+    atkSpawners: [
+        {
+        "row":4,"col":1,"frequency":1,"id":1,"name":"spawner_atk","ownerID":1,"fighters":[
+            {"amount":10,"desc":{"id":1,"tplID":4,"name":"wizard IV","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":10,"desc":{"id":1,"tplID":3,"name":"wizard III","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":10,"desc":{"id":1,"tplID":2,"name":"wizard II","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":10,"desc":{"id":1,"tplID":1,"name":"wizard","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}}
+        ]
+        }
+    ],
+    dfdSpawners: [
+        {
+        "row":0,"col":1,"frequency":1,"id":2,"name":"defender_atk","ownerID":2,"fighters":[
+            {"amount":0,"desc":{"id":1,"tplID":4,"name":"wizard IV","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":0,"desc":{"id":1,"tplID":3,"name":"wizard III","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":0,"desc":{"id":1,"tplID":2,"name":"wizard II","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}},
+            {"amount":0,"desc":{"id":1,"tplID":1,"name":"wizard","hp":500,"magAtk":0,"magDef":2,"phyAtk":10,"phyDef":5,"radius":4,"speed":1}}
+        ]
+        }
+    ],
+    attackerID: 1, 
+    defenderID: 2, 
+    door: {
+        id: 1, 
+        tplID: 3,
+        name: "door",
+        hp: 100, 
+        magAtk: 0, 
+        magDef: 0, 
+        phyAtk: 0, 
+        phyDef: 0, 
+        radius: 0, 
+        speed: 0
+    }, 
+    grid: [
+        [1,0,1,1,1,1,1,1,1,1],
+        [1,0,0,0,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1,1,0,1],
+        [1,0,0,0,1,1,1,0,0,1],
+        [1,0,1,1,1,1,1,1,1,1]
+    ], 
+    targetCol: 1,
+    targetRow: 0
+    }
+}

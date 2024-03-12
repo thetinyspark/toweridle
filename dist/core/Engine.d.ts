@@ -35,7 +35,7 @@ export default class Engine extends Emitter {
      * @param data BattleFieldDescType
      * @returns Promise<boolean>
      */
-    createBattleField(data: BattleFieldDescType): Promise<BattleField>;
+    createBattleField(data: BattleFieldDescType): Promise<boolean | BattleField>;
     /**
      * returns all battlefields
      * @returns BattleField[]

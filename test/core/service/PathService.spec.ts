@@ -81,7 +81,7 @@ describe("PathService test suite", () => {
 
     // we are targeting the door already
     fighter.path = pathToDoor;
-    const pathToDoor2 = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_DOOR, true );
+    const pathToDoor2 = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_DOOR );
 
 
 
@@ -90,7 +90,7 @@ describe("PathService test suite", () => {
 
     // we are targeting the same node than the closest enemy already
     fighter.path = pathToEnemy;
-    const pathToEnemy2 = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_CLOSEST_ENEMY, true );
+    const pathToEnemy2 = service.findPath(fighter, battlefield, PathStrategyMode.TO_THE_CLOSEST_ENEMY );
 
     // then
     expect(spy).toHaveBeenCalledTimes(2);
